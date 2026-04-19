@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAWYNT APEX — V6.1 STABLE</title>
+    <title>GAWYNT APEX — V6.2 REALISM</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Rajdhani:wght@500;700&display=swap');
 
         :root {
             --primary: #0051ff;
             --neon: #00f2ff;
-            --accent: #ff007f;
             --boost: #ff3300;
         }
 
@@ -21,100 +20,73 @@
             background: #000;
             color: white;
             overflow: hidden;
-            width: 100vw;
-            height: 100vh;
+            width: 100vw; height: 100vh;
             touch-action: none;
         }
 
-        /* --- LOBBY SYSTEM --- */
+        /* --- STABLE LOBBY --- */
         #lobby {
             position: fixed; inset: 0; z-index: 1000;
-            background: radial-gradient(circle at center, #1e1b4b 0%, #000 100%);
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
             display: flex; align-items: center; justify-content: center;
-            padding: 20px;
         }
 
         .container {
-            width: 100%; max-width: 600px;
-            background: rgba(255, 255, 255, 0.03);
+            width: 90%; max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
-            padding: 30px; border-radius: 30px;
+            padding: 30px; border-radius: 25px;
             border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
         }
 
-        .logo-main {
-            font-family: 'Orbitron'; font-size: 3rem;
-            font-weight: 900; color: var(--neon);
-            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
-        }
+        .logo { font-family: 'Orbitron'; font-size: 3.5rem; font-weight: 900; color: var(--neon); margin-bottom: 20px; }
 
-        .section-label {
-            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: 700;
-            color: #888; text-transform: uppercase; margin: 25px 0 10px;
-            letter-spacing: 2px;
-        }
-
-        /* FIXED SELECTION GRID */
-        .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
         .card {
-            background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 15px;
-            padding: 15px 5px; cursor: pointer; transition: 0.2s;
+            background: rgba(255,255,255,0.1); padding: 15px 5px; border-radius: 12px;
+            cursor: pointer; border: 2px solid transparent; transition: 0.2s;
         }
-        .card.selected {
-            border-color: var(--neon); background: rgba(0, 242, 255, 0.15);
-            box-shadow: 0 0 15px var(--neon);
-        }
+        .card.selected { border-color: var(--neon); background: rgba(0, 242, 255, 0.1); }
 
-        .dot-row { display: flex; justify-content: center; gap: 12px; }
+        .dots { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
         .dot {
-            width: 45px; height: 45px; border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             border: 3px solid rgba(255,255,255,0.2); cursor: pointer;
-            transition: 0.2s;
         }
-        .dot.active { 
-            border-color: #fff; 
-            box-shadow: 0 0 15px currentColor; 
-            transform: scale(1.2);
-        }
+        .dot.active { border-color: white; transform: scale(1.2); box-shadow: 0 0 15px currentColor; }
 
-        /* NETWORK AREA */
-        .network-zone { margin-top: 30px; }
         input {
-            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
-            font-family: 'Orbitron'; text-align: center; font-size: 1.1rem; margin-bottom: 10px;
-            background: rgba(0,0,0,0.4); color: white;
+            width: 100%; padding: 15px; border-radius: 10px; border: none;
+            background: rgba(0,0,0,0.5); color: white; font-family: 'Orbitron';
+            text-align: center; margin-bottom: 10px;
         }
-        input:focus { outline: none; border-color: var(--neon); }
 
         .btn {
-            width: 100%; padding: 18px; border-radius: 12px; border: none;
-            font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; transition: 0.2s;
+            width: 100%; padding: 15px; border-radius: 10px; border: none;
+            font-family: 'Orbitron'; font-weight: 900; cursor: pointer; margin-bottom: 10px;
         }
-        .btn-host { background: var(--primary); color: white; margin-bottom: 8px; }
-        .btn-join { background: white; color: black; }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-white { background: white; color: black; }
 
-        /* --- GAME UI --- */
+        /* --- GAME ENGINE UI --- */
         #game-ui { display: none; }
         #canvas { position: fixed; inset: 0; background: #000; }
+        
         #hud {
             position: fixed; top: 20px; width: 100%;
             display: flex; justify-content: space-around; z-index: 500;
         }
-        .stat-card {
-            background: rgba(0, 0, 0, 0.8); padding: 10px 20px; border-radius: 15px;
-            border-bottom: 3px solid var(--neon); text-align: center;
-        }
+        .stat { background: rgba(0,0,0,0.8); padding: 10px 20px; border-radius: 10px; border-bottom: 2px solid var(--neon); }
 
         #mobile-controls {
             position: fixed; bottom: 30px; width: 100%;
             display: none; justify-content: space-between; padding: 0 20px; z-index: 500;
         }
-        .joy-circ {
-            width: 80px; height: 80px; background: rgba(255,255,255,0.1); 
-            border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
-            display: flex; align-items: center; justify-content: center; color: white;
+        .btn-circle {
+            width: 70px; height: 70px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 1px solid white;
+            display: flex; align-items: center; justify-content: center;
         }
     </style>
 </head>
@@ -122,38 +94,32 @@
 
     <div id="lobby">
         <div class="container">
-            <h1 class="logo-main">GAWYNT</h1>
+            <h1 class="logo">GAWYNT</h1>
             
-            <div class="section-label">Vehicle Rig</div>
-            <div class="selection-grid" id="car-selector"></div>
+            <div class="grid" id="car-list"></div>
+            <div class="dots" id="color-list"></div>
 
-            <div class="section-label">Team Color</div>
-            <div class="dot-row" id="color-selector"></div>
-
-            <div class="network-zone">
-                <button class="btn btn-host" id="host-btn">CREATE SECTOR</button>
-                <div class="section-label">Or Join Existing</div>
-                <input type="text" id="sector-code" placeholder="ENTER CODE">
-                <button class="btn btn-join" id="join-btn">CONNECT UPLINK</button>
-                <p id="status" style="margin-top:15px; font-size: 0.9rem; color: var(--neon); font-family: 'Orbitron';"></p>
-            </div>
+            <button class="btn btn-blue" id="host-btn">HOST NEW SECTOR</button>
+            <input type="text" id="sector-in" placeholder="SYNC CODE">
+            <button class="btn btn-white" id="join-btn">JOIN SECTOR</button>
+            <p id="status" style="color:var(--neon); font-family:'Orbitron'; font-size:0.8rem;"></p>
         </div>
     </div>
 
     <div id="game-ui">
         <div id="hud">
-            <div class="stat-card">SPEED<br><span id="ui-speed" style="font-size:1.5rem; font-weight:900;">0</span></div>
-            <div class="stat-card" style="border-color: var(--boost);">NOS<br><span id="ui-boost" style="font-size:1.5rem; font-weight:900;">100</span></div>
+            <div class="stat">SPEED <span id="val-speed">0</span></div>
+            <div class="stat" style="border-color:var(--boost)">NOS <span id="val-boost">100</span></div>
         </div>
         <canvas id="canvas"></canvas>
         <div id="mobile-controls">
             <div style="display:flex; gap:10px;">
-                <div id="joy-L" class="joy-circ">L</div>
-                <div id="joy-R" class="joy-circ">R</div>
+                <div id="m-left" class="btn-circle">L</div>
+                <div id="m-right" class="btn-circle">R</div>
             </div>
             <div style="display:flex; gap:10px;">
-                <div id="btn-boost" class="joy-circ" style="border-color:var(--boost)">NOS</div>
-                <div id="btn-gas" class="joy-circ" style="border-color:var(--neon)">GAS</div>
+                <div id="m-boost" class="btn-circle" style="border-color:var(--boost)">NOS</div>
+                <div id="m-gas" class="btn-circle" style="border-color:var(--neon)">GAS</div>
             </div>
         </div>
     </div>
@@ -162,189 +128,208 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-        // CONFIG - Same as your Gawynt Hub
-        const firebaseConfig = {
+        const config = {
             apiKey: "AIzaSyBuWWnqDX5mUra5pF3uuBxEVSKjcESifTk",
             databaseURL: "https://gawynt-hub-default-rtdb.firebaseio.com",
             projectId: "gawynt-hub",
         };
+        const db = getDatabase(initializeApp(config));
 
-        const fb = initializeApp(firebaseConfig);
-        const db = getDatabase(fb);
-
-        const CAR_RIGS = [
-            { name: 'X-1', top: 400, acc: 0.3 },
-            { name: 'S-7', top: 320, acc: 0.2 },
-            { name: 'G-0', top: 280, acc: 0.4 }
-        ];
-        const COLORS = ['#0051ff', '#ff007f', '#00f2ff', '#4dff00', '#ffcc00'];
-
-        let gameState = {
+        const CARS = [{n:'HYPER', s:450, a:0.3}, {n:'STRAT', s:350, a:0.2}, {n:'PHANT', s:300, a:0.4}];
+        const COLS = ['#0051ff', '#ff007f', '#00f2ff', '#4dff00', '#ffcc00'];
+        
+        let state = {
             active: false, role: null, room: null,
-            car: CAR_RIGS[0], color: COLORS[0],
+            car: CARS[0], color: COLS[0],
             p: { x: 0, z: 0, speed: 0, boost: 100 },
-            rival: { x: 0, z: 0, active: false, color: '#fff' }
+            rival: { x: 0, z: 0, color: '#fff', active: false },
+            track: [], roadW: 2000, segL: 200, camH: 1000, drawD: 200
         };
 
-        // --- FIXED UI BINDINGS ---
-        function initLobby() {
-            const carCont = document.getElementById('car-selector');
-            CAR_RIGS.forEach((c, i) => {
+        const keys = { up: false, left: false, right: false, boost: false };
+
+        // --- UI SETUP ---
+        function setupUI() {
+            const cl = document.getElementById('car-list');
+            CARS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `card ${i===0?'selected':''}`;
-                d.innerHTML = `<strong>${c.name}</strong>`;
+                d.innerHTML = `<b>${c.n}</b>`;
                 d.onclick = () => {
                     document.querySelectorAll('.card').forEach(e=>e.classList.remove('selected'));
-                    d.classList.add('selected'); gameState.car = c;
+                    d.classList.add('selected'); state.car = c;
                 };
-                carCont.appendChild(d);
+                cl.appendChild(d);
             });
 
-            const colCont = document.getElementById('color-selector');
-            COLORS.forEach((c, i) => {
+            const col = document.getElementById('color-list');
+            COLS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `dot ${i===0?'active':''}`;
                 d.style.backgroundColor = c;
-                d.style.color = c; // for the shadow
+                d.style.color = c;
                 d.onclick = () => {
                     document.querySelectorAll('.dot').forEach(e=>e.classList.remove('active'));
-                    d.classList.add('active'); 
-                    gameState.color = c;
+                    d.classList.add('active'); state.color = c;
                 };
-                colCont.appendChild(d);
+                col.appendChild(d);
             });
         }
-        initLobby();
+        setupUI();
 
-        // --- UPLINK LOGIC ---
+        // --- UPLINK ---
         document.getElementById('host-btn').onclick = async () => {
-            const code = Math.random().toString(36).substring(7).toUpperCase();
-            gameState.room = code;
-            gameState.role = 'host';
-            document.getElementById('status').innerText = "SECTOR: " + code;
-            await set(ref(db, `v6/${code}`), {
-                status: 'wait',
-                host: { color: gameState.color, x: 0, z: 0 }
-            });
-            listen(code);
+            state.room = Math.random().toString(36).substring(7).toUpperCase();
+            state.role = 'host';
+            document.getElementById('status').innerText = "SECTOR CODE: " + state.room;
+            await set(ref(db, `v62/${state.room}`), { status: 'wait', host: { x:0, z:0, c:state.color } });
+            listen();
         };
 
         document.getElementById('join-btn').onclick = async () => {
-            const code = document.getElementById('sector-code').value.toUpperCase();
+            const code = document.getElementById('sector-in').value.toUpperCase();
             if(!code) return;
-            gameState.room = code;
-            gameState.role = 'guest';
-            await update(ref(db, `v6/${code}`), {
-                status: 'play',
-                guest: { color: gameState.color, x: 0, z: 0 }
-            });
-            listen(code);
+            state.room = code; state.role = 'guest';
+            await update(ref(db, `v62/${code}`), { status: 'play', guest: { x:0, z:0, c:state.color } });
+            listen();
         };
 
-        function listen(code) {
-            onValue(ref(db, `v6/${code}`), (snap) => {
+        function listen() {
+            onValue(ref(db, `v62/${state.room}`), (snap) => {
                 const val = snap.val();
                 if(!val) return;
-                if(val.status === 'play' && !gameState.active) startGame();
-                
-                const rivalData = (gameState.role === 'host') ? val.guest : val.host;
-                if(rivalData) {
-                    gameState.rival.x = rivalData.x;
-                    gameState.rival.z = rivalData.z;
-                    gameState.rival.color = rivalData.color;
-                    gameState.rival.active = true;
-                }
+                if(val.status === 'play' && !state.active) start();
+                const riv = (state.role === 'host') ? val.guest : val.host;
+                if(riv) { state.rival.x = riv.x; state.rival.z = riv.z; state.rival.color = riv.c; state.rival.active = true; }
             });
         }
 
-        // --- GAME ENGINE ---
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const keys = { up: false, left: false, right: false, boost: false };
+        // --- REALISTIC ENGINE ---
+        function buildTrack() {
+            for(let i=0; i<1000; i++) {
+                state.track.push({
+                    z: i * state.segL,
+                    curve: i > 200 && i < 400 ? 2 : (i > 600 && i < 800 ? -3 : 0),
+                    col: Math.floor(i/3)%2 ? {r:'#333', g:'#050505', b:'#fff'} : {r:'#222', g:'#000', b:'#f00'}
+                });
+            }
+        }
 
-        function startGame() {
-            gameState.active = true;
+        function project(p, camX, camY, camZ, fov, w, h) {
+            const scale = fov / (p.z - camZ);
+            p.sx = (w/2) + (scale * (p.x - camX) * w/2);
+            p.sy = (h/2) - (scale * (p.y - camY) * h/2);
+            p.sw = scale * state.roadW * w/2;
+        }
+
+        function start() {
+            state.active = true;
             document.getElementById('lobby').style.display = 'none';
             document.getElementById('game-ui').style.display = 'block';
             if(window.innerWidth < 800) document.getElementById('mobile-controls').style.display = 'flex';
             
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            const cvs = document.getElementById('canvas');
+            const ctx = cvs.getContext('2d');
+            cvs.width = window.innerWidth; cvs.height = window.innerHeight;
 
+            buildTrack();
+
+            // Uplink Loop
             setInterval(() => {
-                if(!gameState.active) return;
-                update(ref(db, `v6/${gameState.room}/${gameState.role}`), {
-                    x: gameState.p.x, z: gameState.p.z
-                });
+                update(ref(db, `v62/${state.room}/${state.role}`), { x: state.p.x, z: state.p.z });
             }, 50);
 
+            function loop() {
+                updatePhys();
+                draw(ctx, cvs.width, cvs.height);
+                requestAnimationFrame(loop);
+            }
             loop();
         }
 
-        function loop() {
-            updatePhysics();
-            render();
-            requestAnimationFrame(loop);
-        }
-
-        function updatePhysics() {
-            const p = gameState.p;
+        function updatePhys() {
+            const p = state.p;
             if(keys.up) {
-                let max = gameState.car.top;
-                if(keys.boost && p.boost > 0) { max *= 1.4; p.boost -= 1; }
-                else { p.boost = Math.min(100, p.boost + 0.2); }
-                if(p.speed < max) p.speed += gameState.car.acc * 5;
-            } else {
-                p.speed *= 0.98;
-            }
+                let max = state.car.s * 50;
+                if(keys.boost && p.boost > 0) { max *= 1.5; p.boost -= 0.5; }
+                else p.boost = Math.min(100, p.boost + 0.1);
+                if(p.speed < max) p.speed += state.car.a * 200;
+            } else p.speed *= 0.98;
 
-            p.z += p.speed;
+            p.z += p.speed * 0.016;
             if(keys.left) p.x -= 0.05;
             if(keys.right) p.x += 0.05;
-            p.x = Math.max(-1, Math.min(1, p.x));
+            p.x = Math.max(-2, Math.min(2, p.x));
 
-            document.getElementById('ui-speed').innerText = Math.floor(p.speed);
-            document.getElementById('ui-boost').innerText = Math.floor(p.boost);
+            document.getElementById('val-speed').innerText = Math.floor(p.speed/100);
+            document.getElementById('val-boost').innerText = Math.floor(p.boost);
         }
 
-        function render() {
-            ctx.fillStyle = '#050505';
-            ctx.fillRect(0,0,canvas.width, canvas.height);
+        function draw(ctx, w, h) {
+            ctx.fillStyle = '#0a0a1a'; ctx.fillRect(0,0,w,h);
             
-            // Simplified 3D Road
-            ctx.fillStyle = '#111';
-            ctx.beginPath();
-            ctx.moveTo(canvas.width*0.4, 0); ctx.lineTo(canvas.width*0.6, 0);
-            ctx.lineTo(canvas.width, canvas.height); ctx.lineTo(0, canvas.height);
-            ctx.fill();
+            const startI = Math.floor(state.p.z / state.segL);
+            const fov = 1 / Math.tan(80 * Math.PI / 360);
+            let xOff = 0, dx = 0;
 
-            // Draw Rival
-            if(gameState.rival.active) {
-                let screenX = (canvas.width/2) + (gameState.rival.x * 200);
-                ctx.fillStyle = gameState.rival.color;
-                ctx.fillRect(screenX - 20, canvas.height/2, 40, 30);
+            for(let n=0; n<state.drawD; n++) {
+                const s = state.track[(startI + n) % state.track.length];
+                const p1 = { x: -xOff, y: 0, z: s.z };
+                const p2 = { x: -(xOff + dx), y: 0, z: s.z + state.segL };
+                
+                // Looped track logic
+                const zOffset = (s.z < state.p.z) ? state.track.length * state.segL : 0;
+                project(p1, state.p.x * state.roadW, state.camH, state.p.z - zOffset, fov, w, h);
+                project(p2, state.p.x * state.roadW, state.camH, state.p.z - zOffset, fov, w, h);
+
+                xOff += dx; dx += s.curve;
+
+                if(p1.sy <= p2.sy) continue;
+
+                // Grass
+                ctx.fillStyle = s.col.g; ctx.fillRect(0, p2.sy, w, p1.sy - p2.sy);
+                // Rum Strips
+                ctx.fillStyle = s.col.b;
+                ctx.beginPath(); ctx.moveTo(p1.sx - p1.sw*1.1, p1.sy); ctx.lineTo(p1.sx + p1.sw*1.1, p1.sy);
+                ctx.lineTo(p2.sx + p2.sw*1.1, p2.sy); ctx.lineTo(p2.sx - p2.sw*1.1, p2.sy); ctx.fill();
+                // Road
+                ctx.fillStyle = s.col.r;
+                ctx.beginPath(); ctx.moveTo(p1.sx - p1.sw, p1.sy); ctx.lineTo(p1.sx + p1.sw, p1.sy);
+                ctx.lineTo(p2.sx + p2.sw, p2.sy); ctx.lineTo(p2.sx - p2.sw, p2.sy); ctx.fill();
+
+                // Draw Rival if in this segment
+                if(state.rival.active && Math.floor(state.rival.z/state.segL) === (startI + n)%state.track.length) {
+                    const rx = p1.sx + (state.rival.x * p1.sw);
+                    ctx.fillStyle = state.rival.color;
+                    ctx.fillRect(rx-20, p1.sy-30, 40, 30);
+                }
             }
+
+            // Dashboard
+            ctx.fillStyle = '#050505';
+            ctx.beginPath(); ctx.moveTo(0,h); ctx.lineTo(0,h*0.85); 
+            ctx.quadraticCurveTo(w/2, h*0.75, w, h*0.85); ctx.lineTo(w,h); ctx.fill();
         }
 
-        // --- CONTROLS ---
+        // --- BINDINGS ---
         window.onkeydown = e => {
-            if(e.key === 'ArrowUp') keys.up = true;
-            if(e.key === 'ArrowLeft') keys.left = true;
-            if(e.key === 'ArrowRight') keys.right = true;
-            if(e.key === 'Shift') keys.boost = true;
+            if(e.key==='ArrowUp'||e.key==='w') keys.up=true;
+            if(e.key==='ArrowLeft'||e.key==='a') keys.left=true;
+            if(e.key==='ArrowRight'||e.key==='d') keys.right=true;
+            if(e.key==='Shift') keys.boost=true;
         };
         window.onkeyup = e => {
-            if(e.key === 'ArrowUp') keys.up = false;
-            if(e.key === 'ArrowLeft') keys.left = false;
-            if(e.key === 'ArrowRight') keys.right = false;
-            if(e.key === 'Shift') keys.boost = false;
+            if(e.key==='ArrowUp'||e.key==='w') keys.up=false;
+            if(e.key==='ArrowLeft'||e.key==='a') keys.left=false;
+            if(e.key==='ArrowRight'||e.key==='d') keys.right=false;
+            if(e.key==='Shift') keys.boost=false;
         };
-
-        const tBind = (id, k) => {
-            document.getElementById(id).ontouchstart = () => keys[k] = true;
-            document.getElementById(id).ontouchend = () => keys[k] = false;
+        const m = (id, k) => {
+            const el = document.getElementById(id);
+            el.ontouchstart = e => { e.preventDefault(); keys[k]=true; };
+            el.ontouchend = e => { e.preventDefault(); keys[k]=false; };
         };
-        tBind('joy-L', 'left'); tBind('joy-R', 'right'); tBind('btn-gas', 'up'); tBind('btn-boost', 'boost');
+        m('m-left','left'); m('m-right','right'); m('m-gas','up'); m('m-boost','boost');
     </script>
 </body>
 </html>
