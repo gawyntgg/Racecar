@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAWYNT APEX — V6.0 ULTRA</title>
+    <title>GAWYNT APEX — V6.1 STABLE</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
@@ -12,7 +12,6 @@
             --neon: #00f2ff;
             --accent: #ff007f;
             --boost: #ff3300;
-            --glass: rgba(255, 255, 255, 0.95);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,7 +19,7 @@
         body {
             font-family: 'Rajdhani', sans-serif;
             background: #000;
-            color: #2c3e50;
+            color: white;
             overflow: hidden;
             width: 100vw;
             height: 100vh;
@@ -30,109 +29,92 @@
         /* --- LOBBY SYSTEM --- */
         #lobby {
             position: fixed; inset: 0; z-index: 1000;
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: radial-gradient(circle at center, #1e1b4b 0%, #000 100%);
             display: flex; align-items: center; justify-content: center;
-            padding: 20px; transition: opacity 0.5s ease;
+            padding: 20px;
         }
 
         .container {
-            width: 100%; max-width: 750px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
-            padding: 40px; border-radius: 40px;
+            width: 100%; max-width: 600px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            padding: 30px; border-radius: 30px;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
 
         .logo-main {
-            font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5.5rem);
-            font-weight: 900; color: var(--neon); letter-spacing: -3px;
+            font-family: 'Orbitron'; font-size: 3rem;
+            font-weight: 900; color: var(--neon);
             text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
         }
 
         .section-label {
-            font-family: 'Orbitron'; font-size: 0.85rem; font-weight: 700;
-            color: #aaa; text-transform: uppercase; margin: 30px 0 15px;
-            display: flex; align-items: center; gap: 15px;
+            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: 700;
+            color: #888; text-transform: uppercase; margin: 25px 0 10px;
+            letter-spacing: 2px;
         }
-        .section-label::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
 
-        /* SELECTION GRID */
-        .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        /* FIXED SELECTION GRID */
+        .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .card {
-            background: rgba(255,255,255,0.1); border: 2px solid transparent; border-radius: 20px;
-            padding: 25px 10px; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: white;
+            background: rgba(255,255,255,0.05); border: 2px solid transparent; border-radius: 15px;
+            padding: 15px 5px; cursor: pointer; transition: 0.2s;
         }
         .card.selected {
-            border-color: var(--neon); background: rgba(0, 242, 255, 0.1);
-            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 242, 255, 0.2);
+            border-color: var(--neon); background: rgba(0, 242, 255, 0.15);
+            box-shadow: 0 0 15px var(--neon);
         }
 
-        .dot-row { display: flex; justify-content: center; gap: 15px; }
+        .dot-row { display: flex; justify-content: center; gap: 12px; }
         .dot {
-            width: 55px; height: 55px; border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.2); cursor: pointer;
+            width: 45px; height: 45px; border-radius: 50%;
+            border: 3px solid rgba(255,255,255,0.2); cursor: pointer;
             transition: 0.2s;
         }
-        .dot.active { border-color: white; box-shadow: 0 0 20px currentColor; transform: scale(1.15); }
+        .dot.active { 
+            border-color: #fff; 
+            box-shadow: 0 0 15px currentColor; 
+            transform: scale(1.2);
+        }
 
         /* NETWORK AREA */
-        .network-zone { background: rgba(0,0,0,0.3); padding: 35px; border-radius: 35px; margin-top: 35px; border: 1px solid rgba(255,255,255,0.1); }
+        .network-zone { margin-top: 30px; }
         input {
-            width: 100%; padding: 22px; border-radius: 18px; border: 2px solid transparent;
-            font-family: 'Orbitron'; text-align: center; font-size: 1.4rem; margin-bottom: 15px;
-            background: rgba(255,255,255,0.1); color: white;
+            width: 100%; padding: 15px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
+            font-family: 'Orbitron'; text-align: center; font-size: 1.1rem; margin-bottom: 10px;
+            background: rgba(0,0,0,0.4); color: white;
         }
         input:focus { outline: none; border-color: var(--neon); }
 
         .btn {
-            width: 100%; padding: 22px; border-radius: 18px; border: none;
+            width: 100%; padding: 18px; border-radius: 12px; border: none;
             font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; transition: 0.2s; letter-spacing: 2px;
+            text-transform: uppercase; transition: 0.2s;
         }
-        .btn-host { background: var(--primary); color: white; margin-bottom: 12px; box-shadow: 0 10px 20px rgba(0,81,255,0.3); }
+        .btn-host { background: var(--primary); color: white; margin-bottom: 8px; }
         .btn-join { background: white; color: black; }
 
-        /* --- GAME INTERFACE --- */
+        /* --- GAME UI --- */
         #game-ui { display: none; }
         #canvas { position: fixed; inset: 0; background: #000; }
-
         #hud {
-            position: fixed; top: 40px; width: 100%;
-            display: flex; justify-content: space-between; padding: 0 40px; z-index: 500;
+            position: fixed; top: 20px; width: 100%;
+            display: flex; justify-content: space-around; z-index: 500;
         }
         .stat-card {
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
-            padding: 15px 30px; border-radius: 20px;
-            border-bottom: 4px solid var(--neon); border-top: 1px solid rgba(255,255,255,0.2);
-            text-align: center; min-width: 140px; color: white;
+            background: rgba(0, 0, 0, 0.8); padding: 10px 20px; border-radius: 15px;
+            border-bottom: 3px solid var(--neon); text-align: center;
         }
-        .stat-val { font-family: 'Orbitron'; font-size: 2.2rem; font-weight: 900; color: #fff; }
-        .boost-val { color: var(--boost); text-shadow: 0 0 10px var(--boost); }
 
-        /* MOBILE JOYSTICKS */
         #mobile-controls {
-            position: fixed; bottom: 40px; width: 100%;
-            display: none; justify-content: space-between; padding: 0 30px; z-index: 500;
+            position: fixed; bottom: 30px; width: 100%;
+            display: none; justify-content: space-between; padding: 0 20px; z-index: 500;
         }
         .joy-circ {
-            width: 90px; height: 90px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron'; font-weight: 900; color: white;
-            user-select: none;
-        }
-        .joy-circ:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
-        .action-btns { display: flex; gap: 15px; }
-        #btn-gas { width: 110px; height: 110px; border-color: var(--neon); color: var(--neon); font-size: 1.2rem; }
-        #btn-boost { width: 90px; height: 90px; border-color: var(--boost); color: var(--boost); font-size: 0.9rem; align-self: flex-end;}
-
-        #msg-box {
-            position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-            z-index: 1200; font-family: 'Orbitron'; font-size: 12rem; color: var(--neon);
-            text-shadow: 0 0 40px var(--neon); pointer-events: none;
+            width: 80px; height: 80px; background: rgba(255,255,255,0.1); 
+            border-radius: 50%; border: 1px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center; color: white;
         }
     </style>
 </head>
@@ -141,40 +123,37 @@
     <div id="lobby">
         <div class="container">
             <h1 class="logo-main">GAWYNT</h1>
-            <p style="font-family:Orbitron; letter-spacing: 12px; color: var(--neon); font-size: 0.8rem; margin-top: -15px;">PRO SERIES V6.0</p>
-
-            <div class="section-label">SELECT YOUR RIG</div>
+            
+            <div class="section-label">Vehicle Rig</div>
             <div class="selection-grid" id="car-selector"></div>
 
-            <div class="section-label">TEAM COLORS</div>
+            <div class="section-label">Team Color</div>
             <div class="dot-row" id="color-selector"></div>
 
-            <div class="section-label">GLOBAL UPLINK</div>
             <div class="network-zone">
-                <button class="btn btn-host" id="host-btn">INITIATE SECTOR</button>
-                <input type="text" id="sector-code" placeholder="ENTER SYNC CODE">
-                <button class="btn btn-join" id="join-btn">JOIN SECTOR</button>
-                <p id="status" style="margin-top:25px; font-family:Orbitron; font-weight:900; color:var(--neon);"></p>
+                <button class="btn btn-host" id="host-btn">CREATE SECTOR</button>
+                <div class="section-label">Or Join Existing</div>
+                <input type="text" id="sector-code" placeholder="ENTER CODE">
+                <button class="btn btn-join" id="join-btn">CONNECT UPLINK</button>
+                <p id="status" style="margin-top:15px; font-size: 0.9rem; color: var(--neon); font-family: 'Orbitron';"></p>
             </div>
         </div>
     </div>
 
     <div id="game-ui">
         <div id="hud">
-            <div class="stat-card"><small style="font-weight:700; color:#aaa;">SPEED</small><div id="ui-speed" class="stat-val">0</div></div>
-            <div class="stat-card" style="border-bottom-color: var(--boost);"><small style="font-weight:700; color:#aaa;">NOS</small><div id="ui-boost" class="stat-val boost-val">100</div></div>
-            <div class="stat-card"><small style="font-weight:700; color:#aaa;">LAP</small><div id="ui-lap" class="stat-val">1/3</div></div>
+            <div class="stat-card">SPEED<br><span id="ui-speed" style="font-size:1.5rem; font-weight:900;">0</span></div>
+            <div class="stat-card" style="border-color: var(--boost);">NOS<br><span id="ui-boost" style="font-size:1.5rem; font-weight:900;">100</span></div>
         </div>
         <canvas id="canvas"></canvas>
-        <div id="msg-box">3</div>
         <div id="mobile-controls">
-            <div style="display:flex; gap:15px;">
-                <div id="joy-L" class="joy-circ"><<</div>
-                <div id="joy-R" class="joy-circ">>></div>
+            <div style="display:flex; gap:10px;">
+                <div id="joy-L" class="joy-circ">L</div>
+                <div id="joy-R" class="joy-circ">R</div>
             </div>
-            <div class="action-btns">
-                <div id="btn-boost" class="joy-circ">NOS</div>
-                <div id="btn-gas" class="joy-circ">DRIVE</div>
+            <div style="display:flex; gap:10px;">
+                <div id="btn-boost" class="joy-circ" style="border-color:var(--boost)">NOS</div>
+                <div id="btn-gas" class="joy-circ" style="border-color:var(--neon)">GAS</div>
             </div>
         </div>
     </div>
@@ -183,6 +162,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+        // CONFIG - Same as your Gawynt Hub
         const firebaseConfig = {
             apiKey: "AIzaSyBuWWnqDX5mUra5pF3uuBxEVSKjcESifTk",
             databaseURL: "https://gawynt-hub-default-rtdb.firebaseio.com",
@@ -192,45 +172,30 @@
         const fb = initializeApp(firebaseConfig);
         const db = getDatabase(fb);
 
-        /* -----------------------------------------------------------
-           GLOBAL STATE & CONSTANTS
-        ----------------------------------------------------------- */
         const CAR_RIGS = [
-            { name: 'HYPER-X', top: 420, acc: 0.35, turn: 6.0, friction: 0.985 },
-            { name: 'STRATOS', top: 340, acc: 0.22, turn: 6.8, friction: 0.992 },
-            { name: 'GHOST', top: 280, acc: 0.45, turn: 8.0, friction: 0.975 }
+            { name: 'X-1', top: 400, acc: 0.3 },
+            { name: 'S-7', top: 320, acc: 0.2 },
+            { name: 'G-0', top: 280, acc: 0.4 }
         ];
         const COLORS = ['#0051ff', '#ff007f', '#00f2ff', '#4dff00', '#ffcc00'];
 
-        let state = {
+        let gameState = {
             active: false, role: null, room: null,
             car: CAR_RIGS[0], color: COLORS[0],
-            p: { x: 0, z: 0, speed: 0, lap: 1, boost: 100 },
-            rival: { x: 0, z: 0, speed: 0, active: false, color: '#fff', lastZ: 0 }
+            p: { x: 0, z: 0, speed: 0, boost: 100 },
+            rival: { x: 0, z: 0, active: false, color: '#fff' }
         };
 
-        const engine = {
-            canvas: document.getElementById('canvas'),
-            ctx: document.getElementById('canvas').getContext('2d'),
-            w: 0, h: 0, roadW: 2400, segL: 200,
-            camH: 1000, camD: null, drawDist: 300, 
-            track: [], trackLen: 0
-        };
-
-        const keys = { up: false, left: false, right: false, boost: false };
-
-        /* -----------------------------------------------------------
-           UI SYSTEM
-        ----------------------------------------------------------- */
-        function setupUI() {
+        // --- FIXED UI BINDINGS ---
+        function initLobby() {
             const carCont = document.getElementById('car-selector');
             CAR_RIGS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `card ${i===0?'selected':''}`;
-                d.innerHTML = `<strong>${c.name}</strong><br><small>${c.top} KM/H</small>`;
+                d.innerHTML = `<strong>${c.name}</strong>`;
                 d.onclick = () => {
                     document.querySelectorAll('.card').forEach(e=>e.classList.remove('selected'));
-                    d.classList.add('selected'); state.car = c;
+                    d.classList.add('selected'); gameState.car = c;
                 };
                 carCont.appendChild(d);
             });
@@ -239,306 +204,147 @@
             COLORS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `dot ${i===0?'active':''}`;
-                d.style.background = c;
-                d.style.color = c; // For box shadow currentColor
+                d.style.backgroundColor = c;
+                d.style.color = c; // for the shadow
                 d.onclick = () => {
                     document.querySelectorAll('.dot').forEach(e=>e.classList.remove('active'));
-                    d.classList.add('active'); state.color = c;
+                    d.classList.add('active'); 
+                    gameState.color = c;
                 };
                 colCont.appendChild(d);
             });
         }
-        setupUI();
+        initLobby();
 
-        /* -----------------------------------------------------------
-           NETWORKING (STABLE SYNC)
-        ----------------------------------------------------------- */
+        // --- UPLINK LOGIC ---
         document.getElementById('host-btn').onclick = async () => {
-            state.room = Math.random().toString(36).substring(7).toUpperCase();
-            state.role = 'host';
-            document.getElementById('status').innerText = "GENERATED SECTOR: " + state.room;
-            await set(ref(db, `apex_v5/${state.room}`), {
-                state: 'wait', host: { x: 0, z: 0, speed: 0, color: state.color }
+            const code = Math.random().toString(36).substring(7).toUpperCase();
+            gameState.room = code;
+            gameState.role = 'host';
+            document.getElementById('status').innerText = "SECTOR: " + code;
+            await set(ref(db, `v6/${code}`), {
+                status: 'wait',
+                host: { color: gameState.color, x: 0, z: 0 }
             });
-            listen();
+            listen(code);
         };
 
         document.getElementById('join-btn').onclick = async () => {
             const code = document.getElementById('sector-code').value.toUpperCase();
             if(!code) return;
-            state.room = code; state.role = 'guest';
-            document.getElementById('status').innerText = "SYNCING TO " + code;
-            await update(ref(db, `apex_v5/${state.room}`), {
-                state: 'start', guest: { x: 0, z: 0, speed: 0, color: state.color }
+            gameState.room = code;
+            gameState.role = 'guest';
+            await update(ref(db, `v6/${code}`), {
+                status: 'play',
+                guest: { color: gameState.color, x: 0, z: 0 }
             });
-            listen();
+            listen(code);
         };
 
-        function listen() {
-            onValue(ref(db, `apex_v5/${state.room}`), (snap) => {
+        function listen(code) {
+            onValue(ref(db, `v6/${code}`), (snap) => {
                 const val = snap.val();
                 if(!val) return;
-                if(val.state === 'start' && !state.active) runGame();
+                if(val.status === 'play' && !gameState.active) startGame();
                 
-                const rival = (state.role === 'host') ? val.guest : val.host;
-                if(rival) {
-                    state.rival.x = rival.x;
-                    state.rival.z = rival.z;
-                    state.rival.speed = rival.speed;
-                    state.rival.color = rival.color;
-                    state.rival.active = true;
+                const rivalData = (gameState.role === 'host') ? val.guest : val.host;
+                if(rivalData) {
+                    gameState.rival.x = rivalData.x;
+                    gameState.rival.z = rivalData.z;
+                    gameState.rival.color = rivalData.color;
+                    gameState.rival.active = true;
                 }
             });
         }
 
-        /* -----------------------------------------------------------
-           TRACK GENERATOR
-        ----------------------------------------------------------- */
-        function createTrack() {
-            engine.track = [];
-            const add = (len, curve) => {
-                for(let n=0; n<len; n++) {
-                    const i = engine.track.length;
-                    engine.track.push({
-                        index: i,
-                        p1: { world: { z: i * engine.segL }, screen: {} },
-                        p2: { world: { z: (i+1) * engine.segL }, screen: {} },
-                        curve: curve,
-                        color: Math.floor(i/3)%2 ? 
-                            { road: '#3b3b3b', grass: '#050a15', rum: '#fff' } : 
-                            { road: '#2f2f2f', grass: '#03060d', rum: '#d32f2f' }
-                    });
-                }
-            };
-            add(150, 0);   // Start
-            add(100, 2);   // Easy R
-            add(150, -4);  // Hard L
-            add(200, 0);   // Straight
-            add(120, 6);   // Sharp R
-            add(100, -2);  // Easy L
-            add(150, 0);   // Finish
-            engine.trackLen = engine.track.length * engine.segL;
-        }
+        // --- GAME ENGINE ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const keys = { up: false, left: false, right: false, boost: false };
 
-        /* -----------------------------------------------------------
-           CORE GAMEPLAY
-        ----------------------------------------------------------- */
-        function project(p, camX, camY, camZ, w, h) {
-            p.camera = { x: (p.world.x || 0) - camX, y: (p.world.y || 0) - camY, z: (p.world.z || 0) - camZ };
-            let scale = engine.camD / p.camera.z;
-            p.screen.x = Math.round((w/2) + (scale * p.camera.x * w/2));
-            p.screen.y = Math.round((h/2) - (scale * p.camera.y * h/2));
-            p.screen.w = Math.round(scale * engine.roadW * w/2);
-        }
-
-        async function runGame() {
-            state.active = true;
+        function startGame() {
+            gameState.active = true;
             document.getElementById('lobby').style.display = 'none';
             document.getElementById('game-ui').style.display = 'block';
+            if(window.innerWidth < 800) document.getElementById('mobile-controls').style.display = 'flex';
             
-            createTrack();
-            resize();
-            window.addEventListener('resize', resize);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
-            const msg = document.getElementById('msg-box');
-            msg.style.display = 'flex';
-            for(let i=3; i>0; i--) { msg.innerText = i; await new Promise(r=>setTimeout(r,1000)); }
-            msg.innerText = "GO!"; setTimeout(()=>msg.style.display='none', 800);
-
-            // Sync Interval
             setInterval(() => {
-                if(!state.active) return;
-                update(ref(db, `apex_v5/${state.room}/${state.role}`), {
-                    x: state.p.x, z: state.p.z, speed: state.p.speed
+                if(!gameState.active) return;
+                update(ref(db, `v6/${gameState.room}/${gameState.role}`), {
+                    x: gameState.p.x, z: gameState.p.z
                 });
-            }, 35);
+            }, 50);
 
-            mainLoop();
+            loop();
         }
 
-        function resize() {
-            engine.w = window.innerWidth;
-            engine.h = window.innerHeight;
-            engine.canvas.width = engine.w;
-            engine.canvas.height = engine.h;
-            
-            // Fix 1: Dynamically adjust draw distance based on screen size
-            engine.drawDist = engine.w < 800 ? 120 : 300; 
-            if(engine.w < 800) document.getElementById('mobile-controls').style.display = 'flex';
-        }
-
-        // Cache UI elements outside the loop
-        let lastSpeed = -1, lastLap = -1, lastBoost = -1;
-        const uiSpeed = document.getElementById('ui-speed');
-        const uiLap = document.getElementById('ui-lap');
-        const uiBoost = document.getElementById('ui-boost');
-
-        function mainLoop() {
-            if(!state.active) return;
+        function loop() {
             updatePhysics();
-            draw();
-            requestAnimationFrame(mainLoop);
+            render();
+            requestAnimationFrame(loop);
         }
 
         function updatePhysics() {
-            const dt = 1/60;
-            const p = state.p;
-            const car = state.car;
-
-            // Upgrade 1: Boost Mechanics
-            let currentMaxSpeed = car.top * 80;
-            if (keys.boost && p.boost > 0 && keys.up) {
-                currentMaxSpeed *= 1.35; // 35% speed boost
-                p.speed = Math.min(p.speed + (car.acc * 12000 * dt), currentMaxSpeed);
-                p.boost = Math.max(0, p.boost - 30 * dt); // Drain boost
+            const p = gameState.p;
+            if(keys.up) {
+                let max = gameState.car.top;
+                if(keys.boost && p.boost > 0) { max *= 1.4; p.boost -= 1; }
+                else { p.boost = Math.min(100, p.boost + 0.2); }
+                if(p.speed < max) p.speed += gameState.car.acc * 5;
             } else {
-                if (keys.up) p.speed = Math.min(p.speed + (car.acc * 6000 * dt), currentMaxSpeed);
-                else p.speed *= car.friction;
-                p.boost = Math.min(100, p.boost + 5 * dt); // Recharge boost
+                p.speed *= 0.98;
             }
 
-            const speedPct = p.speed / currentMaxSpeed;
-            if(keys.left) p.x -= dt * speedPct * car.turn;
-            if(keys.right) p.x += dt * speedPct * car.turn;
+            p.z += p.speed;
+            if(keys.left) p.x -= 0.05;
+            if(keys.right) p.x += 0.05;
+            p.x = Math.max(-1, Math.min(1, p.x));
 
-            let seg = engine.track[Math.floor(p.z / engine.segL) % engine.track.length];
-            p.x -= dt * speedPct * seg.curve * 2.5;
-
-            p.z += p.speed * dt;
-            if(p.z >= engine.trackLen) { p.z -= engine.trackLen; p.lap++; }
-
-            p.x = Math.max(-2.8, Math.min(2.8, p.x));
-            
-            // Fix 1 (Cont): Only write to the DOM if values change
-            let displaySpeed = Math.floor(p.speed / 60);
-            let displayBoost = Math.floor(p.boost);
-            
-            if(displaySpeed !== lastSpeed) { uiSpeed.innerText = displaySpeed; lastSpeed = displaySpeed; }
-            if(displayBoost !== lastBoost) { uiBoost.innerText = displayBoost; lastBoost = displayBoost; }
-            if(p.lap !== lastLap) { uiLap.innerText = `${p.lap}/3`; lastLap = p.lap; }
-            
-            // Upgrade 2: Dynamic Camera System based on speed
-            let speedFactor = p.speed / (car.top * 80);
-            engine.camH = 1000 - (speedFactor * 300); // Lower camera at high speeds
-            let fov = 100 + (speedFactor * 30); // Widen FOV at high speeds (tunnel vision)
-            engine.camD = 1 / Math.tan((fov/2) * Math.PI / 180);
+            document.getElementById('ui-speed').innerText = Math.floor(p.speed);
+            document.getElementById('ui-boost').innerText = Math.floor(p.boost);
         }
 
-        function draw() {
-            const ctx = engine.ctx;
-            const w = engine.w, h = engine.h;
-
-            let grad = ctx.createLinearGradient(0,0,0,h/2);
-            // Cyberpunk Sky
-            grad.addColorStop(0, '#0a0a2a'); grad.addColorStop(1, '#ff007f'); 
-            ctx.fillStyle = grad; ctx.fillRect(0,0,w,h/2);
-            ctx.fillStyle = '#020205'; ctx.fillRect(0,h/2,w,h/2);
-
-            let startI = Math.floor(state.p.z / engine.segL);
-            let xOff = 0, dx = 0;
-
-            // Fix 2: Pre-calculate rival segment for correct rendering on curves
-            let rivalSegIndex = Math.floor(state.rival.z / engine.segL) % engine.track.length;
-            let rZ = state.rival.z - state.p.z;
-            if(rZ < -engine.trackLen/2) rZ += engine.trackLen;
-            if(rZ > engine.trackLen/2) rZ -= engine.trackLen;
-            let isRivalVisible = state.rival.active && rZ > 0 && rZ < engine.drawDist * engine.segL;
-
-            for(let n=0; n<engine.drawDist; n++) {
-                let s = engine.track[(startI + n) % engine.track.length];
-                let looped = s.index < startI;
-
-                project(s.p1, (state.p.x * engine.roadW) - xOff, engine.camH, state.p.z - (looped ? engine.trackLen : 0), w, h);
-                project(s.p2, (state.p.x * engine.roadW) - xOff - dx, engine.camH, state.p.z - (looped ? engine.trackLen : 0), w, h);
-
-                xOff += dx; dx += s.curve;
-
-                if(s.p1.camera.z <= engine.camD) continue;
-
-                const p1 = s.p1.screen, p2 = s.p2.screen;
-                ctx.fillStyle = s.color.grass; ctx.fillRect(0, p2.y, w, p1.y-p2.y);
-                
-                ctx.fillStyle = s.color.rum;
-                ctx.beginPath(); ctx.moveTo(p1.x - p1.w*1.15, p1.y); ctx.lineTo(p1.x + p1.w*1.15, p1.y);
-                ctx.lineTo(p2.x + p2.w*1.15, p2.y); ctx.lineTo(p2.x - p2.w*1.15, p2.y); ctx.fill();
-
-                ctx.fillStyle = s.color.road;
-                ctx.beginPath(); ctx.moveTo(p1.x - p1.w, p1.y); ctx.lineTo(p1.x + p1.w, p1.y);
-                ctx.lineTo(p2.x + p2.w, p2.y); ctx.lineTo(p2.x - p2.w, p2.y); ctx.fill();
-
-                // Fix 2 (Cont): Draw rival perfectly attached to the track segment
-                if (isRivalVisible && s.index === rivalSegIndex) {
-                    let rx = p1.x + (state.rival.x * p1.w); 
-                    let ry = p1.y;
-                    
-                    let carW = p1.w * 0.45; 
-                    let carH = carW * 0.6;
-                    
-                    ctx.fillStyle = 'rgba(0,0,0,0.5)';
-                    ctx.fillRect(rx - carW/2, ry, carW, carH * 0.2);
-                    
-                    ctx.fillStyle = state.rival.color;
-                    ctx.fillRect(rx - carW/2, ry - carH, carW, carH);
-                    
-                    ctx.fillStyle = '#ff0055'; // Taillights
-                    ctx.fillRect(rx - carW/2 + carW*0.1, ry - carH*0.4, carW*0.2, carH*0.2);
-                    ctx.fillRect(rx + carW/2 - carW*0.3, ry - carH*0.4, carW*0.2, carH*0.2);
-                }
-            }
-
-            drawCockpit(ctx, w, h);
-        }
-
-        function drawCockpit(ctx, w, h) {
+        function render() {
             ctx.fillStyle = '#050505';
-            ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h*0.9);
-            ctx.quadraticCurveTo(w/2, h*0.82, w, h*0.9); ctx.lineTo(w, h); ctx.fill();
+            ctx.fillRect(0,0,canvas.width, canvas.height);
             
-            // Dynamic Neon accent based on boost
-            ctx.strokeStyle = keys.boost && state.p.boost > 0 ? var(--boost) : state.color; 
-            ctx.lineWidth = keys.boost ? 6 : 3; 
-            ctx.stroke();
-
-            ctx.save();
-            let wheelY = (w > 800) ? h + 150 : h + 50; 
-            ctx.translate(w/2, wheelY);
-            let s = 0; if(keys.left) s = -0.5; if(keys.right) s = 0.5;
-            
-            // Vibrate steering wheel when boosting
-            if(keys.boost && state.p.boost > 0) {
-                ctx.translate(Math.random()*4-2, Math.random()*4-2);
-            }
-            
-            ctx.rotate(s);
-            ctx.lineWidth = 40; ctx.strokeStyle = '#0a0a0a';
-            ctx.beginPath(); ctx.arc(0, -250, 250, Math.PI+0.4, -0.4); ctx.stroke();
-            
+            // Simplified 3D Road
             ctx.fillStyle = '#111';
-            ctx.beginPath(); ctx.arc(0,-250, 40, 0, Math.PI*2); ctx.fill();
-            ctx.restore();
+            ctx.beginPath();
+            ctx.moveTo(canvas.width*0.4, 0); ctx.lineTo(canvas.width*0.6, 0);
+            ctx.lineTo(canvas.width, canvas.height); ctx.lineTo(0, canvas.height);
+            ctx.fill();
+
+            // Draw Rival
+            if(gameState.rival.active) {
+                let screenX = (canvas.width/2) + (gameState.rival.x * 200);
+                ctx.fillStyle = gameState.rival.color;
+                ctx.fillRect(screenX - 20, canvas.height/2, 40, 30);
+            }
         }
 
-        /* -----------------------------------------------------------
-           CONTROLS (WITH NOS SUPPORT)
-        ----------------------------------------------------------- */
+        // --- CONTROLS ---
         window.onkeydown = e => {
-            if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = true;
-            if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = true;
-            if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = true;
-            if(e.code==='ShiftLeft'||e.code==='ShiftRight') keys.boost = true;
+            if(e.key === 'ArrowUp') keys.up = true;
+            if(e.key === 'ArrowLeft') keys.left = true;
+            if(e.key === 'ArrowRight') keys.right = true;
+            if(e.key === 'Shift') keys.boost = true;
         };
         window.onkeyup = e => {
-            if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = false;
-            if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = false;
-            if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = false;
-            if(e.code==='ShiftLeft'||e.code==='ShiftRight') keys.boost = false;
+            if(e.key === 'ArrowUp') keys.up = false;
+            if(e.key === 'ArrowLeft') keys.left = false;
+            if(e.key === 'ArrowRight') keys.right = false;
+            if(e.key === 'Shift') keys.boost = false;
         };
-        const bind = (id, k) => {
-            const el = document.getElementById(id);
-            el.ontouchstart = (e) => { e.preventDefault(); keys[k] = true; };
-            el.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
+
+        const tBind = (id, k) => {
+            document.getElementById(id).ontouchstart = () => keys[k] = true;
+            document.getElementById(id).ontouchend = () => keys[k] = false;
         };
-        bind('joy-L','left'); bind('joy-R','right'); bind('btn-gas','up'); bind('btn-boost','boost');
+        tBind('joy-L', 'left'); tBind('joy-R', 'right'); tBind('btn-gas', 'up'); tBind('btn-boost', 'boost');
     </script>
 </body>
 </html>
