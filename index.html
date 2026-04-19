@@ -204,7 +204,6 @@ const CAR_DATA = [
 ];
 const COLORS = ['#00d2ff', '#ff9d00', '#ff007f', '#00ff88', '#ffffff'];
 
-// Larger, more complex track
 const trackPoints = [
     {x: 500, y: 500}, {x: 3000, y: 500}, {x: 3400, y: 1000}, 
     {x: 3400, y: 2500}, {x: 2800, y: 3000}, {x: 1000, y: 3000}, 
@@ -214,7 +213,8 @@ const trackPoints = [
 /* --- STATE --- */
 let selCar = CAR_DATA[0], selColor = COLORS[0], lapCount = 3;
 let role, roomID, isRacing = false, isFrozen = true;
-let car = { x: 500, y: 650, angle: 0, speed: 0, lap: 1, trigger: false };
+// Fixed Y coordinate from 650 to 500 so you start directly on the track
+let car = { x: 600, y: 500, angle: 0, speed: 0, lap: 1, trigger: false }; 
 let opponent = null, keys = {};
 
 const canvas = document.getElementById('gameCanvas');
@@ -260,10 +260,11 @@ window.initHost = async () => {
     roomID = Math.random().toString(36).substring(7).toUpperCase();
     role = 'host';
     document.getElementById('sectorOutput').innerText = "SECTOR CODE: " + roomID;
+    // Fixed spawn point
     await set(ref(db, `race_v2/${roomID}`), {
         state: 'waiting',
         totalLaps: lapCount,
-        host: { color: selColor, x: 500, y: 650, angle: 0, active: true, lap: 1 }
+        host: { color: selColor, x: 600, y: 500, angle: 0, active: true, lap: 1 } 
     });
     startListener();
 };
@@ -275,8 +276,9 @@ window.initJoin = async () => {
     const snap = await get(ref(db, `race_v2/${roomID}`));
     if (snap.exists()) {
         lapCount = snap.val().totalLaps;
+        // Fixed spawn point
         await update(ref(db, `race_v2/${roomID}`), {
-            guest: { color: selColor, x: 500, y: 580, angle: 0, active: true, lap: 1 },
+            guest: { color: selColor, x: 600, y: 460, angle: 0, active: true, lap: 1 }, 
             state: 'begin'
         });
         startListener();
@@ -401,7 +403,14 @@ function render() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
-    ctx.translate(canvas.width / 2 - car.x, canvas.height / 2 - car.y);
+    
+    // --- COCKPIT CAMERA MATH (DO NOT DELETE) ---
+    // Move origin lower on screen to simulate driver perspective
+    ctx.translate(canvas.width / 2, canvas.height * 0.7);
+    // Rotate the world opposite to the car's direction so car always faces UP
+    ctx.rotate(-car.angle - Math.PI / 2);
+    // Move to the exact car position
+    ctx.translate(-car.x, -car.y);
 
     // The Track
     ctx.strokeStyle = 'var(--asphalt)';
@@ -431,7 +440,63 @@ function render() {
     }
 
     ctx.restore();
+
+    // Draw Dashboard Cockpit Overlay after the world renders
+    drawCockpitOverlay(ctx, canvas.width, canvas.height, selColor);
+
     document.getElementById('hSpeed').innerText = Math.round(car.speed * 12);
+}
+
+/* --- NEW: COCKPIT DASHBOARD OVERLAY --- */
+function drawCockpitOverlay(ctx, w, h, color) {
+    ctx.save();
+    
+    // Dashboard Base
+    ctx.fillStyle = '#0a0a0c';
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    ctx.lineTo(0, h * 0.8);
+    ctx.quadraticCurveTo(w / 2, h * 0.7, w, h * 0.8);
+    ctx.lineTo(w, h);
+    ctx.fill();
+
+    // Neon Dashboard Trim
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(0, h * 0.8);
+    ctx.quadraticCurveTo(w / 2, h * 0.7, w, h * 0.8);
+    ctx.stroke();
+
+    // Dynamic Steering Wheel
+    let steerAngle = 0;
+    if (keys['ArrowLeft'] || keys['KeyA']) steerAngle = -0.4;
+    if (keys['ArrowRight'] || keys['KeyD']) steerAngle = 0.4;
+
+    ctx.translate(w / 2, h * 1.05); // wheel pivot
+    ctx.rotate(steerAngle);
+
+    const wheelRadius = Math.min(w, h) * 0.35;
+    
+    // Wheel Grip
+    ctx.lineWidth = 30;
+    ctx.strokeStyle = '#1a1a1a';
+    ctx.beginPath();
+    ctx.arc(0, 0, wheelRadius, Math.PI + 0.2, -0.2); 
+    ctx.stroke();
+
+    // Inner Wheel Trim
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = '#333';
+    ctx.beginPath();
+    ctx.arc(0, 0, wheelRadius, Math.PI + 0.2, -0.2); 
+    ctx.stroke();
+
+    // Steering Column/Spokes
+    ctx.fillStyle = '#111';
+    ctx.fillRect(-20, -wheelRadius, 40, wheelRadius);
+    
+    ctx.restore();
 }
 </script>
 </body>
