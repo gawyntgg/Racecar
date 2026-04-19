@@ -1,1 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GAWYNT RACING — ULTRA</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
 
+:root {
+    --neon-blue: #00d2ff;
+    --neon-orange: #ff9d00;
+    --neon-pink: #ff007f;
+    --asphalt: #1a1a1f;
+    --grass: #145a32;
+    --gold: #f5c400;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: 'Rajdhani', sans-serif; 
+    background: var(--grass); 
+    color: white; 
+    overflow: hidden; 
+    height: 100vh; 
+    width: 100vw; 
+    touch-action: none; 
+}
+
+/* --- LOBBY UI --- */
+#lobby {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #0d0d12 0%, #1a1a2e 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 100; overflow-y: auto; padding: 40px 0;
+}
+
+.logo-container { text-align: center; margin-bottom: 40px; }
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 8vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    background: linear-gradient(90deg, var(--neon-blue), #fff, var(--neon-blue));
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: flow 3s linear infinite;
+}
+@keyframes flow { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+
+.setup-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px; padding: 30px;
+    width: 90%; max-width: 600px;
+    backdrop-filter: blur(10px);
+}
+
+.section-title {
+    font-family: 'Orbitron'; font-size: 0.7rem; letter-spacing: 0.3em;
+    color: var(--neon-blue); text-transform: uppercase; margin-bottom: 15px;
+}
+
+/* --- SELECTION TILES --- */
+.grid { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center; }
+.card {
+    width: 130px; padding: 15px; background: rgba(0,0,0,0.3);
+    border: 2px solid #333; border-radius: 12px; cursor: pointer;
+    transition: all 0.3s; text-align: center;
+}
+.card:hover { border-color: var(--neon-blue); transform: translateY(-3px); }
+.card.selected { 
+    border-color: var(--neon-blue); 
+    background: rgba(0, 210, 255, 0.1); 
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.2); 
+}
+.card-name { font-family: 'Orbitron'; font-size: 0.8rem; font-weight: 700; }
+
+.color-dot {
+    width: 35px; height: 35px; border-radius: 50%; border: 3px solid transparent;
+    cursor: pointer; transition: 0.2s;
+}
+.color-dot.active { border-color: white; transform: scale(1.2); }
+
+/* --- CONTROLS --- */
+.lap-ctrl { display: flex; align-items: center; gap: 25px; margin-bottom: 30px; justify-content: center; }
+.lap-btn {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--neon-blue);
+    background: none; color: white; cursor: pointer; font-size: 1.2rem;
+}
+.lap-display { font-family: 'Orbitron'; font-size: 2rem; color: var(--neon-blue); min-width: 50px; text-align: center; }
+
+.btn-main {
+    font-family: 'Orbitron'; font-weight: 900; font-size: 0.9rem;
+    padding: 15px 40px; border: none; border-radius: 10px;
+    background: var(--neon-blue); color: #000; cursor: pointer;
+    transition: 0.2s; width: 100%; margin-bottom: 10px;
+}
+.btn-main:hover { background: #fff; box-shadow: 0 0 30px var(--neon-blue); }
+
+input {
+    width: 100%; background: #000; border: 1px solid #444; border-radius: 10px;
+    padding: 15px; color: white; text-align: center; font-family: 'Orbitron';
+    margin-bottom: 10px; text-transform: uppercase;
+}
+
+/* --- GAME UI --- */
+#gameCanvas { display: none; position: fixed; inset: 0; }
+#hud {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    display: none; background: rgba(0,0,0,0.8); border: 1px solid var(--neon-blue);
+    border-radius: 15px; padding: 10px 40px; z-index: 10;
+    flex-direction: row; gap: 40px;
+}
+.hud-item { text-align: center; font-family: 'Orbitron'; }
+.hud-label { font-size: 0.6rem; color: var(--neon-blue); display: block; }
+.hud-val { font-size: 1.8rem; font-weight: 900; }
+
+#count {
+    position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+    z-index: 50; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px);
+}
+#count-val { font-family: 'Orbitron'; font-size: 15vw; font-weight: 900; color: #fff; }
+
+#mobile-ui {
+    position: fixed; bottom: 30px; width: 100%; display: none;
+    justify-content: space-between; padding: 0 40px; z-index: 20;
+}
+.m-joy {
+    width: 100px; height: 100px; background: rgba(255,255,255,0.1);
+    border: 2px solid #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron'; font-weight: 900;
+}
+</style>
+</head>
+<body>
+
+<div id="lobby">
+    <div class="logo-container">
+        <div class="logo">GAWYNT</div>
+        <div style="letter-spacing: 0.8em; font-size: 0.7rem; color: var(--neon-blue);">RACING SYSTEMS</div>
+    </div>
+
+    <div class="setup-box">
+        <div class="section-title">Select Prototype</div>
+        <div class="grid" id="carGrid"></div>
+
+        <div class="section-title">Core Identity</div>
+        <div class="grid" id="colorGrid"></div>
+
+        <div class="section-title">Race Parameters (Laps)</div>
+        <div class="lap-ctrl">
+            <button class="lap-btn" onclick="adjustLaps(-1)">-</button>
+            <div class="lap-display" id="lapView">3</div>
+            <button class="lap-btn" onclick="adjustLaps(1)">+</button>
+        </div>
+
+        <button class="btn-main" onclick="initHost()">CREATE SECTOR</button>
+        <input type="text" id="joinInput" placeholder="ENTER SECTOR CODE">
+        <button class="btn-main" style="background: #222; color: #fff;" onclick="initJoin()">JOIN SECTOR</button>
+        
+        <div id="sectorOutput" style="margin-top:20px; font-family: 'Orbitron'; color: var(--gold); text-align: center;"></div>
+    </div>
+</div>
+
+<div id="count"><div id="count-val">READY</div></div>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="hud">
+    <div class="hud-item"><span class="hud-label">LAP</span><span id="hLap" class="hud-val">1/3</span></div>
+    <div class="hud-item"><span class="hud-label">KM/H</span><span id="hSpeed" class="hud-val">0</span></div>
+</div>
+
+<div id="mobile-ui">
+    <div id="ctrl-L" class="m-joy">STEER L</div>
+    <div id="ctrl-G" class="m-joy" style="border-color: var(--neon-blue); color: var(--neon-blue);">ACCEL</div>
+    <div id="ctrl-R" class="m-joy">STEER R</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBuWWnqDX5mUra5pF3uuBxEVSKjcESifTk",
+    authDomain: "gawynt-hub.firebaseapp.com",
+    databaseURL: "https://gawynt-hub-default-rtdb.firebaseio.com",
+    projectId: "gawynt-hub",
+    storageBucket: "gawynt-hub.firebasestorage.app",
+    messagingSenderId: "330651852035",
+    appId: "1:330651852035:web:db931f867da21b6a519d36"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* --- CONSTANTS & TRACK --- */
+const CAR_DATA = [
+    { id: 'f1', name: 'BOLT-01', top: 22, acc: 0.45, turn: 0.08 },
+    { id: 'gt', name: 'GAWYNT-GT', top: 19, acc: 0.35, turn: 0.06 },
+    { id: 'ap', name: 'APEX-X', top: 17, acc: 0.4, turn: 0.1 }
+];
+const COLORS = ['#00d2ff', '#ff9d00', '#ff007f', '#00ff88', '#ffffff'];
+
+// Larger, more complex track
+const trackPoints = [
+    {x: 500, y: 500}, {x: 3000, y: 500}, {x: 3400, y: 1000}, 
+    {x: 3400, y: 2500}, {x: 2800, y: 3000}, {x: 1000, y: 3000}, 
+    {x: 400, y: 2400}, {x: 400, y: 1000}, {x: 500, y: 500}
+];
+
+/* --- STATE --- */
+let selCar = CAR_DATA[0], selColor = COLORS[0], lapCount = 3;
+let role, roomID, isRacing = false, isFrozen = true;
+let car = { x: 500, y: 650, angle: 0, speed: 0, lap: 1, trigger: false };
+let opponent = null, keys = {};
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+/* --- LOBBY INIT --- */
+function setupLobby() {
+    const cg = document.getElementById('carGrid');
+    CAR_DATA.forEach((c, i) => {
+        const div = document.createElement('div');
+        div.className = `card ${i===0?'selected':''}`;
+        div.innerHTML = `<div class="card-name">${c.name}</div>`;
+        div.onclick = () => {
+            document.querySelectorAll('.card').forEach(e => e.classList.remove('selected'));
+            div.classList.add('selected');
+            selCar = c;
+        };
+        cg.appendChild(div);
+    });
+
+    const colG = document.getElementById('colorGrid');
+    COLORS.forEach((c, i) => {
+        const dot = document.createElement('div');
+        dot.className = `color-dot ${i===0?'active':''}`;
+        dot.style.background = c;
+        dot.onclick = () => {
+            document.querySelectorAll('.color-dot').forEach(e => e.classList.remove('active'));
+            dot.classList.add('active');
+            selColor = c;
+        };
+        colG.appendChild(dot);
+    });
+}
+setupLobby();
+
+window.adjustLaps = (v) => {
+    lapCount = Math.max(1, lapCount + v);
+    document.getElementById('lapView').innerText = lapCount;
+};
+
+/* --- FIREBASE SYNC --- */
+window.initHost = async () => {
+    roomID = Math.random().toString(36).substring(7).toUpperCase();
+    role = 'host';
+    document.getElementById('sectorOutput').innerText = "SECTOR CODE: " + roomID;
+    await set(ref(db, `race_v2/${roomID}`), {
+        state: 'waiting',
+        totalLaps: lapCount,
+        host: { color: selColor, x: 500, y: 650, angle: 0, active: true, lap: 1 }
+    });
+    startListener();
+};
+
+window.initJoin = async () => {
+    roomID = document.getElementById('joinInput').value.toUpperCase();
+    if (!roomID) return;
+    role = 'guest';
+    const snap = await get(ref(db, `race_v2/${roomID}`));
+    if (snap.exists()) {
+        lapCount = snap.val().totalLaps;
+        await update(ref(db, `race_v2/${roomID}`), {
+            guest: { color: selColor, x: 500, y: 580, angle: 0, active: true, lap: 1 },
+            state: 'begin'
+        });
+        startListener();
+    }
+};
+
+function startListener() {
+    onValue(ref(db, `race_v2/${roomID}`), snap => {
+        const data = snap.val();
+        if (data.state === 'begin' && !isRacing) triggerCountdown();
+        if (isRacing) opponent = (role === 'host') ? data.guest : data.host;
+    });
+}
+
+async function triggerCountdown() {
+    isRacing = true;
+    document.getElementById('lobby').style.display = 'none';
+    canvas.style.display = 'block';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.getElementById('hud').style.display = 'flex';
+    document.getElementById('hLap').innerText = `1/${lapCount}`;
+    if(/Android|iPhone/i.test(navigator.userAgent)) document.getElementById('mobile-ui').style.display = 'flex';
+
+    const cDiv = document.getElementById('count');
+    const cVal = document.getElementById('count-val');
+    cDiv.style.display = 'flex';
+
+    const sequence = ['3', '2', '1', 'ENGAGE!'];
+    for (let s of sequence) {
+        cVal.innerText = s;
+        cVal.style.color = (s === 'ENGAGE!') ? 'var(--neon-blue)' : '#fff';
+        await new Promise(r => setTimeout(r, 900));
+    }
+    cDiv.style.display = 'none';
+    isFrozen = false;
+
+    render();
+    setInterval(() => {
+        update(ref(db, `race_v2/${roomID}/${role}`), {
+            x: car.x, y: car.y, angle: car.angle, speed: car.speed, lap: car.lap
+        });
+    }, 50);
+}
+
+/* --- GAMEPLAY LOGIC --- */
+window.onkeydown = e => keys[e.code] = true;
+window.onkeyup = e => keys[e.code] = false;
+
+const bindM = (id, k) => {
+    const el = document.getElementById(id);
+    el.onpointerdown = (e) => { e.preventDefault(); keys[k] = true; };
+    el.onpointerup = (e) => { e.preventDefault(); keys[k] = false; };
+};
+bindM('ctrl-L', 'ArrowLeft'); bindM('ctrl-R', 'ArrowRight'); bindM('ctrl-G', 'ArrowUp');
+
+function drawPlayer(ctx, x, y, angle, color, name) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(-25, -12, 55, 24);
+
+    // Front-View Body
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(30, 0); // Nose
+    ctx.lineTo(15, -15); ctx.lineTo(-20, -15); ctx.lineTo(-25, -8);
+    ctx.lineTo(-25, 8); ctx.lineTo(-20, 15); ctx.lineTo(15, 15);
+    ctx.closePath();
+    ctx.fill();
+
+    // Glass Canopy
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0, -10, 15, 20);
+
+    // Neon Headlights
+    ctx.shadowBlur = 15; ctx.shadowColor = color;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(22, -12, 6, 4);
+    ctx.fillRect(22, 8, 6, 4);
+    
+    ctx.restore();
+}
+
+function render() {
+    if (!isRacing) return;
+    requestAnimationFrame(render);
+
+    if (!isFrozen) {
+        // Accel
+        if (keys['ArrowUp'] || keys['KeyW']) car.speed = Math.min(car.speed + selCar.acc, selCar.top);
+        else car.speed *= 0.97;
+
+        // Steering
+        if (car.speed > 1) {
+            const factor = Math.min(car.speed / 10, 1);
+            if (keys['ArrowLeft'] || keys['KeyA']) car.angle -= selCar.turn * factor;
+            if (keys['ArrowRight'] || keys['KeyD']) car.angle += selCar.turn * factor;
+        }
+
+        car.x += Math.cos(car.angle) * car.speed;
+        car.y += Math.sin(car.angle) * car.speed;
+
+        // Finish Line Check (x=500, between y 400-800)
+        if (car.x > 550) car.trigger = true;
+        if (car.x < 500 && car.trigger) {
+            car.lap++;
+            car.trigger = false;
+            document.getElementById('hLap').innerText = `${car.lap}/${lapCount}`;
+            if (car.lap > lapCount) {
+                isFrozen = true;
+                alert("RACE COMPLETE!");
+            }
+        }
+    }
+
+    // Drawing
+    ctx.fillStyle = 'var(--grass)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.save();
+    ctx.translate(canvas.width / 2 - car.x, canvas.height / 2 - car.y);
+
+    // The Track
+    ctx.strokeStyle = 'var(--asphalt)';
+    ctx.lineWidth = 220;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    trackPoints.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.stroke();
+
+    // Track Markings
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([20, 40]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Finish Line
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 15;
+    ctx.beginPath(); ctx.moveTo(500, 400); ctx.lineTo(500, 800); ctx.stroke();
+
+    // Vehicles
+    drawPlayer(ctx, car.x, car.y, car.angle, selColor, "YOU");
+    if (opponent && opponent.active) {
+        drawPlayer(ctx, opponent.x, opponent.y, opponent.angle, opponent.color, "RIVAL");
+    }
+
+    ctx.restore();
+    document.getElementById('hSpeed').innerText = Math.round(car.speed * 12);
+}
+</script>
+</body>
+</html>
