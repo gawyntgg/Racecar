@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAWYNT APEX — 3D ULTRA</title>
+    <title>GAWYNT APEX PRO — MULTIPLAYER 800</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
@@ -11,8 +11,8 @@
             --primary: #0051ff;
             --primary-dark: #003dbf;
             --accent: #ff007f;
-            --glass: rgba(255, 255, 255, 0.85);
-            --border: rgba(0, 0, 0, 0.1);
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.15);
             --bg: #f8f9fa;
         }
 
@@ -32,97 +32,93 @@
         #lobby {
             position: fixed;
             inset: 0;
-            z-index: 200;
+            z-index: 500;
             background: linear-gradient(135deg, #ffffff 0%, #d7e8ff 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-y: auto;
             padding: 20px;
-            transition: opacity 0.5s ease;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             background: var(--glass);
-            backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
             padding: 40px;
-            border-radius: 30px;
+            border-radius: 40px;
             border: 1px solid white;
-            box-shadow: 0 20px 50px rgba(0, 81, 255, 0.1);
+            box-shadow: 0 30px 60px rgba(0, 50, 150, 0.15);
             text-align: center;
         }
 
         .logo-wrap { margin-bottom: 30px; }
         .logo-main {
             font-family: 'Orbitron';
-            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
             font-weight: 900;
             color: var(--primary);
-            letter-spacing: -2px;
-            text-transform: uppercase;
-        }
-        .logo-sub {
-            font-family: 'Orbitron';
-            font-size: 0.7rem;
-            letter-spacing: 5px;
-            color: #888;
-            margin-top: -10px;
+            letter-spacing: -3px;
         }
 
         .section-label {
             font-family: 'Orbitron';
             font-size: 0.65rem;
             font-weight: 700;
-            color: #999;
+            color: #888;
             text-transform: uppercase;
-            margin: 20px 0 12px;
+            margin: 25px 0 15px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
         }
-        .section-label::after { content: ""; flex: 1; height: 1px; background: #eee; }
+        .section-label::after { content: ""; flex: 1; height: 1px; background: #ddd; }
 
         /* CAR SELECTOR */
         .selection-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .card {
             background: white;
             border: 2px solid #eee;
-            border-radius: 15px;
-            padding: 15px 5px;
+            border-radius: 20px;
+            padding: 20px 10px;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card:hover { transform: translateY(-3px); border-color: #ddd; }
         .card.selected {
             border-color: var(--primary);
             background: #f0f5ff;
-            box-shadow: 0 5px 15px rgba(0, 81, 255, 0.1);
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 81, 255, 0.1);
         }
-        .card-title { font-family: 'Orbitron'; font-size: 0.75rem; font-weight: 900; margin-bottom: 5px; }
-        .card-stat { font-size: 0.6rem; color: #777; }
+        .card-title { font-family: 'Orbitron'; font-size: 0.8rem; font-weight: 900; }
 
         /* COLORS */
         .color-row { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
         .dot {
-            width: 40px;
-            height: 40px;
+            width: 45px; height: 45px;
             border-radius: 50%;
-            border: 3px solid white;
+            border: 4px solid white;
             box-shadow: 0 0 0 2px #eee;
             cursor: pointer;
-            transition: 0.2s;
         }
-        .dot.active { transform: scale(1.2); box-shadow: 0 0 0 2px var(--primary); }
+        .dot.active { box-shadow: 0 0 0 2px var(--primary); transform: translateY(-5px); }
 
-        /* MULTIPLAYER INPUTS */
-        .input-group { margin: 20px 0; }
+        /* JOIN SYSTEM */
+        .network-area {
+            background: #fff;
+            padding: 25px;
+            border-radius: 25px;
+            border: 1px solid #eee;
+            margin-top: 20px;
+        }
+
         input[type="text"] {
             width: 100%;
             padding: 18px;
@@ -130,102 +126,69 @@
             border: 2px solid #eee;
             font-family: 'Orbitron';
             text-align: center;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            transition: 0.2s;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            background: #fdfdfd;
         }
-        input:focus { border-color: var(--primary); background: #fff; }
 
         .btn {
             width: 100%;
-            padding: 18px;
+            padding: 20px;
             border-radius: 15px;
             border: none;
             font-family: 'Orbitron';
             font-weight: 900;
-            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.2s;
             text-transform: uppercase;
+            transition: 0.2s;
         }
-        .btn-primary { background: var(--primary); color: white; margin-bottom: 10px; }
-        .btn-primary:hover { background: var(--primary-dark); transform: scale(1.02); }
-        .btn-secondary { background: #2c3e50; color: white; }
+        .btn-host { background: var(--primary); color: white; margin-bottom: 10px; }
+        .btn-join { background: #2c3e50; color: white; }
 
-        /* --- GAME INTERFACE --- */
-        #game-ui { display: none; }
+        /* --- GAME OVERLAY --- */
+        #game-interface { display: none; }
         #canvas { position: fixed; inset: 0; background: #8ec5fc; }
 
         #hud {
             position: fixed;
-            top: 25px;
-            left: 50%;
+            top: 25px; left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
+            display: flex; gap: 15px;
             z-index: 100;
         }
         .hud-item {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 25px;
-            border-radius: 20px;
-            border-bottom: 4px solid var(--primary);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 25px;
+            border-radius: 18px;
+            border-bottom: 5px solid var(--primary);
             text-align: center;
-            min-width: 100px;
+            min-width: 110px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        .hud-label { display: block; font-size: 0.6rem; font-weight: 700; color: #999; font-family: 'Orbitron'; }
-        .hud-value { font-family: 'Orbitron'; font-size: 1.6rem; font-weight: 900; color: #222; }
+        .hud-val { font-family: 'Orbitron'; font-size: 1.5rem; font-weight: 900; color: #111; }
 
-        /* MOBILE JOYSTICKS */
         #mobile-controls {
             position: fixed;
-            bottom: 40px;
-            width: 100%;
-            display: none;
-            justify-content: space-between;
-            padding: 0 40px;
-            z-index: 100;
+            bottom: 40px; width: 100%;
+            display: none; justify-content: space-between;
+            padding: 0 40px; z-index: 200;
         }
-        .joy-circle {
+        .joy-btn {
             width: 90px; height: 90px;
-            background: rgba(255,255,255,0.8);
-            border: 2px solid #ccc;
+            background: rgba(255,255,255,0.9);
+            border: 2px solid #ddd;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron';
-            font-weight: 900;
-            font-size: 0.7rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Orbitron'; font-weight: 900; font-size: 0.7rem;
         }
-        #btn-gas { width: 110px; height: 110px; border-color: var(--primary); color: var(--primary); border-width: 4px; }
+        #btn-gas { width: 120px; height: 120px; border-color: var(--primary); color: var(--primary); font-size: 1rem; }
 
-        /* COUNTDOWN */
         #msg-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.4);
-            backdrop-filter: blur(5px);
-            z-index: 300;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-        #msg-text { font-family: 'Orbitron'; font-size: 8rem; font-weight: 900; color: var(--primary); text-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
-        /* MINI MAP */
-        #minimap {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,255,255,0.7);
-            border-radius: 20px;
-            border: 2px solid white;
-            z-index: 50;
+            position: fixed; inset: 0;
+            background: rgba(255,255,255,0.5);
+            z-index: 600; display: none;
+            align-items: center; justify-content: center;
+            font-family: 'Orbitron'; font-size: 8rem; font-weight: 900; color: var(--primary);
         }
     </style>
 </head>
@@ -234,40 +197,40 @@
     <div id="lobby">
         <div class="container">
             <div class="logo-wrap">
-                <h1 class="logo-main">Gawynt</h1>
-                <div class="logo-sub">Apex Predator Edition</div>
+                <h1 class="logo-main">GAWYNT</h1>
+                <p style="letter-spacing: 5px; color: #aaa; font-weight: 700; margin-top: -10px;">PRO MULTIPLAYER</p>
             </div>
 
-            <div class="section-label">Select Prototype</div>
+            <div class="section-label">1. Prototype</div>
             <div class="selection-grid" id="car-selector"></div>
 
-            <div class="section-label">Color Identity</div>
+            <div class="section-label">2. Identity</div>
             <div class="color-row" id="color-selector"></div>
 
-            <div class="section-label">Race Sector</div>
-            <div class="input-group">
-                <button class="btn btn-primary" onclick="multiplayer.host()">Create Sector</button>
-                <input type="text" id="sector-input" placeholder="ENTER SECTOR CODE">
-                <button class="btn btn-secondary" onclick="multiplayer.join()">Join Sector</button>
+            <div class="section-label">3. Network Sector</div>
+            <div class="network-area">
+                <button class="btn btn-host" id="host-btn">Generate New Sector</button>
+                <div style="margin: 10px 0; color: #ccc;">— OR —</div>
+                <input type="text" id="sector-code" placeholder="ENTER 5-DIGIT CODE">
+                <button class="btn btn-join" id="join-btn">Join Existing Sector</button>
+                <p id="status" style="margin-top: 15px; font-family: Orbitron; font-weight: 700; color: var(--primary);"></p>
             </div>
-            <div id="status-text" style="font-family:Orbitron; font-size: 0.8rem; font-weight: 700; color: var(--primary);"></div>
         </div>
     </div>
 
-    <div id="game-ui">
+    <div id="game-interface">
         <div id="hud">
-            <div class="hud-item"><span class="hud-label">POS</span><span id="ui-pos" class="hud-value">1/2</span></div>
-            <div class="hud-item"><span class="hud-label">KM/H</span><span id="ui-speed" class="hud-value">0</span></div>
-            <div class="hud-item"><span class="hud-label">LAP</span><span id="ui-lap" class="hud-value">1/3</span></div>
+            <div class="hud-item"><small style="display:block; font-size: 0.6rem; color: #999;">SPEED</small><span id="hud-speed" class="hud-val">0</span></div>
+            <div class="hud-item"><small style="display:block; font-size: 0.6rem; color: #999;">LAP</small><span id="hud-lap" class="hud-val">1/3</span></div>
         </div>
 
-        <div id="msg-overlay"><div id="msg-text">3</div></div>
+        <div id="msg-overlay">READY</div>
         <canvas id="canvas"></canvas>
 
         <div id="mobile-controls">
-            <div id="ctrl-left" class="joy-circle">LEFT</div>
-            <div id="btn-gas" class="joy-circle">GAS</div>
-            <div id="ctrl-right" class="joy-circle">RIGHT</div>
+            <div id="touch-left" class="joy-btn">STEER L</div>
+            <div id="btn-gas" class="joy-btn">DRIVE</div>
+            <div id="touch-right" class="joy-btn">STEER R</div>
         </div>
     </div>
 
@@ -275,6 +238,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
+        // --- DATABASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyBuWWnqDX5mUra5pF3uuBxEVSKjcESifTk",
             databaseURL: "https://gawynt-hub-default-rtdb.firebaseio.com",
@@ -284,478 +248,347 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        /* -----------------------------------------------------------
-           GLOBAL CONSTANTS & STATE
-        ----------------------------------------------------------- */
-        const CAR_TYPES = [
-            { id: 'f1', name: 'BOLT-X', top: 320, acc: 0.12, turn: 3.5, grip: 0.4 },
-            { id: 'gt', name: 'ZENITH', top: 280, acc: 0.09, turn: 4.2, grip: 0.6 },
-            { id: 'ap', name: 'APEX', top: 240, acc: 0.15, turn: 5.0, grip: 0.8 }
+        // --- GAME ENGINE CONSTANTS ---
+        const CAR_STATS = [
+            { id: 'f1', name: 'NEON-BOLT', top: 340, acc: 0.15, turn: 4.2 },
+            { id: 'gt', name: 'GT-PRIME', top: 290, acc: 0.10, turn: 4.8 },
+            { id: 'vx', name: 'VORTEX-X', top: 250, acc: 0.18, turn: 5.5 }
         ];
+        const COLORS = ['#0051ff', '#ff007f', '#00ff88', '#ffaa00', '#7000ff'];
 
-        const COLORS = ['#0051ff', '#ff007f', '#00e676', '#ff9100', '#6200ea'];
-
-        let state = {
-            car: CAR_TYPES[0],
-            color: COLORS[0],
-            role: null,
-            roomId: null,
+        // --- STATE MANAGEMENT ---
+        let game = {
             active: false,
-            laps: 3,
-            rival: { pos: 0, x: 0, speed: 0, color: '#ff0000', active: false }
+            role: null, // 'host' or 'guest'
+            roomId: null,
+            player: {
+                x: 0, z: 0, speed: 0, lap: 1, 
+                color: COLORS[0], 
+                prototype: CAR_STATS[0]
+            },
+            rival: {
+                x: 0, z: 0, speed: 0, active: false, color: '#ff0000'
+            },
+            track: [],
+            totalLaps: 3
         };
 
         const engine = {
-            fps: 60,
-            step: 1/60,
+            canvas: document.getElementById('canvas'),
+            ctx: document.getElementById('canvas').getContext('2d'),
             width: 1024,
             height: 768,
-            roadWidth: 2000,
-            segmentLength: 200,
-            rumbleLength: 3,
-            lanes: 3,
-            fieldOfView: 100,
-            cameraHeight: 1000,
-            cameraDepth: null, // calculated
-            drawDistance: 300,
-            fogDensity: 5,
-            playerX: 0,
-            playerZ: 0,
-            speed: 0,
-            maxSpeed: 12000,
-            accel: 100,
-            breaking: -200,
-            decel: -35,
-            offRoadDecel: -150,
-            offRoadLimit: 4000,
-            trackLength: null
+            roadW: 2000,
+            segL: 200,
+            camHeight: 1000,
+            camDepth: null,
+            drawDist: 300,
+            trackLength: 0,
+            step: 1/60
         };
 
-        let segments = [];
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const keys = { left: false, right: false, up: false, down: false };
+        const keys = { up: false, left: false, right: false };
 
-        /* -----------------------------------------------------------
-           SOUND ENGINE (WEB AUDIO API)
-        ----------------------------------------------------------- */
-        const AudioEngine = {
-            ctx: null,
-            osc: null,
-            gain: null,
-            started: false,
+        // --- LOBBY BUILDER ---
+        const buildLobby = () => {
+            const carCont = document.getElementById('car-selector');
+            CAR_STATS.forEach((c, i) => {
+                const d = document.createElement('div');
+                d.className = `card ${i===0?'selected':''}`;
+                d.innerHTML = `<div class="card-title">${c.name}</div><div style="font-size:0.6rem; color:#777;">Top: ${c.top}km/h</div>`;
+                d.onclick = () => {
+                    document.querySelectorAll('.card').forEach(x => x.classList.remove('selected'));
+                    d.classList.add('selected'); game.player.prototype = c;
+                };
+                carCont.appendChild(d);
+            });
+
+            const colCont = document.getElementById('color-selector');
+            COLORS.forEach((c, i) => {
+                const d = document.createElement('div');
+                d.className = `dot ${i===0?'active':''}`;
+                d.style.backgroundColor = c;
+                d.onclick = () => {
+                    document.querySelectorAll('.dot').forEach(x => x.classList.remove('active'));
+                    d.classList.add('active'); game.player.color = c;
+                };
+                colCont.appendChild(d);
+            });
+        };
+        buildLobby();
+
+        // --- NETWORKING: JOIN & HOST ---
+        document.getElementById('host-btn').onclick = async () => {
+            game.roomId = Math.random().toString(36).substring(7).toUpperCase();
+            game.role = 'host';
+            document.getElementById('status').innerText = "SECTOR CREATED: " + game.roomId;
             
-            init() {
-                try {
-                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    this.osc = this.ctx.createOscillator();
-                    this.gain = this.ctx.createGain();
-                    this.osc.type = 'sawtooth';
-                    this.osc.connect(this.gain);
-                    this.gain.connect(this.ctx.destination);
-                    this.gain.gain.value = 0;
-                    this.osc.start();
-                    this.started = true;
-                } catch(e) { console.log("Audio not supported"); }
-            },
-            
-            update(speed) {
-                if (!this.started) return;
-                const freq = 40 + (speed / 100);
-                this.osc.frequency.setTargetAtTime(freq, this.ctx.currentTime, 0.1);
-                const vol = speed > 10 ? 0.05 + (speed / 20000) : 0;
-                this.gain.gain.setTargetAtTime(vol, this.ctx.currentTime, 0.1);
-            }
+            await set(ref(db, `gawynt_v4/${game.roomId}`), {
+                state: 'waiting',
+                host: { 
+                    x: 0, z: 0, speed: 0, 
+                    color: game.player.color, 
+                    proto: game.player.prototype.id 
+                }
+            });
+            listenToSector();
         };
 
-        /* -----------------------------------------------------------
-           TRACK GENERATION
-        ----------------------------------------------------------- */
-        function addSegment(curve, y) {
-            let n = segments.length;
-            segments.push({
-                index: n,
-                p1: { world: { y: lastY(), z: n * engine.segmentLength }, screen: {} },
-                p2: { world: { y: y, z: (n+1) * engine.segmentLength }, screen: {} },
-                curve: curve,
-                sprites: [],
-                color: Math.floor(n / engine.rumbleLength) % 2 ? 
-                    { road: '#444', grass: '#81c784', rumble: '#fff', lane: '#666' } : 
-                    { road: '#3b3b3b', grass: '#78b37b', rumble: '#d32f2f', lane: '#3b3b3b' }
+        document.getElementById('join-btn').onclick = async () => {
+            const code = document.getElementById('sector-code').value.toUpperCase();
+            if(!code) return alert("Please enter a Sector Code");
+            
+            game.roomId = code;
+            game.role = 'guest';
+            document.getElementById('status').innerText = "CONNECTING TO " + code + "...";
+
+            // Update the room state to start the game
+            await update(ref(db, `gawynt_v4/${game.roomId}`), {
+                state: 'start',
+                guest: { 
+                    x: 0, z: 0, speed: 0, 
+                    color: game.player.color, 
+                    proto: game.player.prototype.id 
+                }
+            });
+            listenToSector();
+        };
+
+        function listenToSector() {
+            onValue(ref(db, `gawynt_v4/${game.roomId}`), (snap) => {
+                const data = snap.val();
+                if(!data) return;
+
+                // Sync start
+                if(data.state === 'start' && !game.active) {
+                    beginRace();
+                }
+
+                // Sync rival data
+                const rData = game.role === 'host' ? data.guest : data.host;
+                if(rData) {
+                    game.rival.x = rData.x;
+                    game.rival.z = rData.z;
+                    game.rival.speed = rData.speed;
+                    game.rival.color = rData.color;
+                    game.rival.active = true;
+                }
             });
         }
 
-        function lastY() { return segments.length === 0 ? 0 : segments[segments.length - 1].p2.world.y; }
-
-        function addRoad(enter, hold, leave, curve, y) {
-            let startY = lastY();
-            let endY = startY + (y * engine.segmentLength);
-            let total = enter + hold + leave;
-            for(let i=0; i<enter; i++) addSegment(easeIn(0, curve, i/enter), easeInOut(startY, endY, i/total));
-            for(let i=0; i<hold; i++) addSegment(curve, easeInOut(startY, endY, (enter+i)/total));
-            for(let i=0; i<leave; i++) addSegment(easeInOut(curve, 0, i/leave), easeInOut(startY, endY, (enter+hold+i)/total));
-        }
-
-        function easeIn(a, b, t) { return a + (b-a) * Math.pow(t, 2); }
-        function easeInOut(a, b, t) { return a + (b-a) * ((-Math.cos(t * Math.PI) / 2) + 0.5); }
-
-        function buildTrack() {
-            segments = [];
-            addRoad(50, 50, 50, 0, 0); // Straight start
-            addRoad(100, 100, 100, 3, 2); // Hill and curve
-            addRoad(100, 100, 100, -2, -3); // Dip
-            addRoad(80, 80, 80, 5, 0); // Sharp turn
-            addRoad(100, 100, 100, 0, 5); // Big hill
-            addRoad(100, 100, 100, -4, -5); // Technical section
-            addRoad(50, 50, 50, 0, 0); // Home stretch
-            engine.trackLength = segments.length * engine.segmentLength;
-
-            // Sprites (Trees, Billboards)
-            for(let n=0; n<segments.length; n += 5) {
-                if (Math.random() > 0.3) {
-                    segments[n].sprites.push({ x: -1.5 - Math.random() * 2, type: 'tree' });
-                    segments[n].sprites.push({ x: 1.5 + Math.random() * 2, type: 'tree' });
+        // --- TRACK ENGINE ---
+        function createTrack() {
+            game.track = [];
+            // Section logic: [Enter, Hold, Leave, CurveIntensity]
+            const addRoad = (len, curve) => {
+                for(let n=0; n<len; n++) {
+                    const i = game.track.length;
+                    game.track.push({
+                        index: i,
+                        p1: { world: { z: i * engine.segL }, screen: {} },
+                        p2: { world: { z: (i+1) * engine.segL }, screen: {} },
+                        curve: curve,
+                        color: Math.floor(i/3)%2 ? 
+                            { road: '#444', grass: '#81c784', rumble: '#fff' } : 
+                            { road: '#3b3b3b', grass: '#78b37b', rumble: '#d32f2f' }
+                    });
                 }
-            }
+            };
+
+            addRoad(100, 0);   // Start line
+            addRoad(100, 2);   // Easy Right
+            addRoad(100, -3);  // Hard Left
+            addRoad(200, 0);   // High speed straight
+            addRoad(100, 5);   // Hairpin Right
+            addRoad(100, 0);   // Final stretch
+            
+            engine.trackLength = game.track.length * engine.segL;
         }
 
-        /* -----------------------------------------------------------
-           MATH & PROJECTION
-        ----------------------------------------------------------- */
-        function project(p, camX, camY, camZ, width, height) {
+        function project(p, camX, camY, camZ, w, h) {
             p.camera = {
                 x: (p.world.x || 0) - camX,
                 y: (p.world.y || 0) - camY,
                 z: (p.world.z || 0) - camZ
             };
-            let scale = engine.cameraDepth / p.camera.z;
-            p.screen.x = Math.round((width / 2) + (scale * p.camera.x * width / 2));
-            p.screen.y = Math.round((height / 2) - (scale * p.camera.y * height / 2));
-            p.screen.w = Math.round(scale * engine.roadWidth * width / 2);
+            let scale = engine.camDepth / p.camera.z;
+            p.screen.x = Math.round((w/2) + (scale * p.camera.x * w/2));
+            p.screen.y = Math.round((h/2) - (scale * p.camera.y * h/2));
+            p.screen.w = Math.round(scale * engine.roadW * w/2);
         }
 
-        function findSegment(z) {
-            return segments[Math.floor(z / engine.segmentLength) % segments.length];
-        }
-
-        /* -----------------------------------------------------------
-           MULTIPLAYER
-        ----------------------------------------------------------- */
-        const multiplayer = {
-            host() {
-                state.roomId = Math.random().toString(36).substring(7).toUpperCase();
-                state.role = 'host';
-                document.getElementById('status-text').innerText = "CODE: " + state.roomId;
-                set(ref(db, `apex_v1/${state.roomId}`), {
-                    state: 'wait',
-                    host: { x: 0, z: 0, speed: 0, color: state.color, carId: state.car.id }
-                });
-                this.listen();
-            },
-            join() {
-                state.roomId = document.getElementById('sector-input').value.toUpperCase();
-                if (!state.roomId) return;
-                state.role = 'guest';
-                update(ref(db, `apex_v1/${state.roomId}`), {
-                    state: 'start',
-                    guest: { x: 0, z: 0, speed: 0, color: state.color, carId: state.car.id }
-                });
-                this.listen();
-            },
-            listen() {
-                onValue(ref(db, `apex_v1/${state.roomId}`), (snap) => {
-                    const data = snap.val();
-                    if (!data) return;
-                    if (data.state === 'start' && !state.active) startCountdown();
-                    const rData = state.role === 'host' ? data.guest : data.host;
-                    if (rData) {
-                        state.rival.x = rData.x;
-                        state.rival.pos = rData.z;
-                        state.rival.speed = rData.speed;
-                        state.rival.color = rData.color;
-                        state.rival.active = true;
-                    }
-                });
-            },
-            sync() {
-                if (!state.roomId) return;
-                update(ref(db, `apex_v1/${state.roomId}/${state.role}`), {
-                    x: engine.playerX,
-                    z: engine.playerZ,
-                    speed: engine.speed
-                });
-            }
-        };
-
-        /* -----------------------------------------------------------
-           LOBBY UI SETUP
-        ----------------------------------------------------------- */
-        const selector = document.getElementById('car-selector');
-        CAR_TYPES.forEach((c, i) => {
-            const d = document.createElement('div');
-            d.className = `card ${i===0?'selected':''}`;
-            d.innerHTML = `<div class="card-title">${c.name}</div><div class="card-stat">Top: ${c.top}km/h</div>`;
-            d.onclick = () => {
-                document.querySelectorAll('.card').forEach(e=>e.classList.remove('selected'));
-                d.classList.add('selected'); state.car = c;
-            };
-            selector.appendChild(d);
-        });
-
-        const cSel = document.getElementById('color-selector');
-        COLORS.forEach((c, i) => {
-            const d = document.createElement('div');
-            d.className = `dot ${i===0?'active':''}`;
-            d.style.backgroundColor = c;
-            d.onclick = () => {
-                document.querySelectorAll('.dot').forEach(e=>e.classList.remove('active'));
-                d.classList.add('active'); state.color = c;
-            };
-            cSel.appendChild(d);
-        });
-
-        /* -----------------------------------------------------------
-           GAME CORE
-        ----------------------------------------------------------- */
-        async function startCountdown() {
-            state.active = true;
+        // --- CORE GAME LOOP ---
+        async function beginRace() {
+            game.active = true;
             document.getElementById('lobby').style.display = 'none';
-            document.getElementById('game-ui').style.display = 'block';
+            document.getElementById('game-interface').style.display = 'block';
             
-            // Resize handler
-            window.addEventListener('resize', onResize);
+            createTrack();
             onResize();
-            buildTrack();
-            AudioEngine.init();
+            window.addEventListener('resize', onResize);
 
+            // Audio Start Placeholder
             const overlay = document.getElementById('msg-overlay');
-            const msgText = document.getElementById('msg-text');
             overlay.style.display = 'flex';
-            
-            for (let i=3; i>0; i--) {
-                msgText.innerText = i;
+            for(let i=3; i>0; i--) {
+                overlay.innerText = i;
                 await new Promise(r => setTimeout(r, 1000));
             }
-            msgText.innerText = "GO!";
+            overlay.innerText = "GO!";
             setTimeout(() => overlay.style.display = 'none', 1000);
-            
-            // Start sync loop
-            setInterval(() => multiplayer.sync(), 50);
-            
-            requestAnimationFrame(frame);
+
+            // DB Sync Heartbeat
+            setInterval(() => {
+                if(!game.active) return;
+                update(ref(db, `gawynt_v4/${game.roomId}/${game.role}`), {
+                    x: game.player.x,
+                    z: game.player.z,
+                    speed: game.player.speed
+                });
+            }, 50);
+
+            requestAnimationFrame(render);
         }
 
         function onResize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            engine.cameraDepth = 1 / Math.tan((engine.fieldOfView / 2) * Math.PI / 180);
+            engine.canvas.width = window.innerWidth;
+            engine.canvas.height = window.innerHeight;
+            engine.camDepth = 1 / Math.tan((100 / 2) * Math.PI / 180);
             if(window.innerWidth < 800) document.getElementById('mobile-controls').style.display = 'flex';
         }
 
-        function updatePhysics(dt) {
-            let playerSegment = findSegment(engine.playerZ);
-            let speedPercent = engine.speed / engine.maxSpeed;
-            
-            engine.playerZ += engine.speed * dt;
-            if (engine.playerZ >= engine.trackLength) engine.playerZ -= engine.trackLength;
+        function render() {
+            if(!game.active) return;
+            updatePhysics();
+            drawFrame();
+            requestAnimationFrame(render);
+        }
 
-            // Centrifugal Force
-            engine.playerX = engine.playerX - (dt * speedPercent * playerSegment.curve * engine.car.grip);
+        function updatePhysics() {
+            const dt = engine.step;
+            const p = game.player;
+            const proto = p.prototype;
 
-            // Inputs
-            if (keys.up) engine.speed += engine.accel * dt * 200;
-            else if (keys.down) engine.speed += engine.breaking * dt * 200;
-            else engine.speed += engine.decel * dt * 200;
+            // Movement
+            if(keys.up) p.speed = Math.min(p.speed + (proto.acc * 2000 * dt), proto.top * 40);
+            else p.speed = Math.max(p.speed - (50 * dt * 40), 0);
 
-            if (keys.left) engine.playerX -= dt * speedPercent * engine.car.turn;
-            if (keys.right) engine.playerX += dt * speedPercent * engine.car.turn;
+            const speedPct = p.speed / (proto.top * 40);
+            if(keys.left) p.x -= dt * speedPct * proto.turn;
+            if(keys.right) p.x += dt * speedPct * proto.turn;
 
-            // Boundary
-            if (Math.abs(engine.playerX) > 1) {
-                if (engine.speed > 3000) engine.speed += engine.offRoadDecel * dt * 200;
+            // Track curve drift
+            const currSeg = game.track[Math.floor(p.z / engine.segL) % game.track.length];
+            p.x -= dt * speedPct * currSeg.curve * 1.5;
+
+            p.z += p.speed * dt;
+            if(p.z >= engine.trackLength) {
+                p.z -= engine.trackLength;
+                p.lap++;
+                document.getElementById('hud-lap').innerText = `${p.lap}/${game.totalLaps}`;
             }
 
-            engine.playerX = Math.max(-2, Math.min(2, engine.playerX));
-            engine.speed = Math.max(0, Math.min(engine.speed, engine.maxSpeed * (state.car.top / 300)));
+            p.x = Math.max(-2, Math.min(2, p.x));
+            document.getElementById('hud-speed').innerText = Math.floor(p.speed / 40);
+        }
 
-            AudioEngine.update(engine.speed);
+        function drawFrame() {
+            const ctx = engine.ctx;
+            const w = engine.canvas.width;
+            const h = engine.canvas.height;
             
-            // UI
-            document.getElementById('ui-speed').innerText = Math.floor(engine.speed / 40);
-        }
-
-        function frame() {
-            updatePhysics(engine.step);
-            draw();
-            requestAnimationFrame(frame);
-        }
-
-        function draw() {
-            const w = canvas.width;
-            const h = canvas.height;
-            ctx.clearRect(0, 0, w, h);
-
-            // Sky
             ctx.fillStyle = '#8ec5fc';
             ctx.fillRect(0, 0, w, h);
 
-            let baseSegment = findSegment(engine.playerZ);
-            let basePercent = (engine.playerZ % engine.segmentLength) / engine.segmentLength;
-            let playerY = easeInOut(baseSegment.p1.world.y, baseSegment.p2.world.y, basePercent);
-            
-            let maxy = h;
-            let x = 0;
-            let dx = -(baseSegment.curve * basePercent);
+            let startSeg = Math.floor(game.player.z / engine.segL);
+            let xOffset = 0;
+            let dx = 0;
 
-            // Render Road Segments
-            for(let n=0; n < engine.drawDistance; n++) {
-                let segment = segments[(baseSegment.index + n) % segments.length];
-                let looped = segment.index < baseSegment.index;
+            // Render Road
+            for(let n=0; n < engine.drawDist; n++) {
+                const seg = game.track[(startSeg + n) % game.track.length];
+                const looped = seg.index < startSeg;
                 
-                project(segment.p1, (engine.playerX * engine.roadWidth) - x, playerY + engine.cameraHeight, engine.playerZ - (looped ? engine.trackLength : 0), w, h);
-                project(segment.p2, (engine.playerX * engine.roadWidth) - x - dx, playerY + engine.cameraHeight, engine.playerZ - (looped ? engine.trackLength : 0), w, h);
+                project(seg.p1, (game.player.x * engine.roadW) - xOffset, engine.camHeight, game.player.z - (looped ? engine.trackLength : 0), w, h);
+                project(seg.p2, (game.player.x * engine.roadW) - xOffset - dx, engine.camHeight, game.player.z - (looped ? engine.trackLength : 0), w, h);
                 
-                x += dx;
-                dx += segment.curve;
+                xOffset += dx;
+                dx += seg.curve;
 
-                if (segment.p1.camera.z <= engine.cameraDepth || segment.p2.screen.y >= maxy) continue;
+                if(seg.p1.camera.z <= engine.camDepth) continue;
 
-                renderSegment(ctx, w, h, segment.p1.screen, segment.p2.screen, segment.color);
-                maxy = segment.p2.screen.y;
+                // Draw Slice
+                const p1 = seg.p1.screen, p2 = seg.p2.screen;
+                
+                ctx.fillStyle = seg.color.grass;
+                ctx.fillRect(0, p2.y, w, p1.y - p2.y);
+
+                ctx.fillStyle = seg.color.rumble;
+                ctx.beginPath();
+                ctx.moveTo(p1.x - p1.w * 1.1, p1.y); ctx.lineTo(p1.x + p1.w * 1.1, p1.y);
+                ctx.lineTo(p2.x + p2.w * 1.1, p2.y); ctx.lineTo(p2.x - p2.w * 1.1, p2.y);
+                ctx.fill();
+
+                ctx.fillStyle = seg.color.road;
+                ctx.beginPath();
+                ctx.moveTo(p1.x - p1.w, p1.y); ctx.lineTo(p1.x + p1.w, p1.y);
+                ctx.lineTo(p2.x + p2.w, p2.y); ctx.lineTo(p2.x - p2.w, p2.y);
+                ctx.fill();
             }
 
-            // Render Sprites & Rival
-            for(let n=engine.drawDistance-1; n>0; n--) {
-                let segment = segments[(baseSegment.index + n) % segments.length];
-                
-                // Rival
-                if (state.rival.active) {
-                    let rLooped = state.rival.pos < engine.playerZ;
-                    let rZ = state.rival.pos - (rLooped ? -engine.trackLength : 0);
-                    if (Math.floor(rZ / engine.segmentLength) === segment.index) {
-                        renderCar(ctx, w, h, segment, state.rival.x, state.rival.color);
-                    }
+            // Draw Rival
+            if(game.rival.active) {
+                const rZ = game.rival.z - game.player.z;
+                if(rZ > 0 && rZ < engine.drawDist * engine.segL) {
+                    let scale = engine.camDepth / (rZ / engine.roadW);
+                    let rx = (w/2) + (scale * (game.rival.x - game.player.x) * engine.roadW * w/2000);
+                    let ry = (h/2) + (engine.camHeight * scale);
+                    ctx.fillStyle = game.rival.color;
+                    ctx.fillRect(rx - 30*scale, ry - 60*scale, 60*scale, 40*scale);
                 }
-
-                // Scenery
-                segment.sprites.forEach(s => {
-                    renderSprite(ctx, w, h, segment, s);
-                });
             }
 
-            drawCockpit(w, h);
+            drawCockpit(ctx, w, h);
         }
 
-        function renderSegment(ctx, width, height, p1, p2, color) {
-            // Grass
-            ctx.fillStyle = color.grass;
-            ctx.fillRect(0, p2.y, width, p1.y - p2.y);
-
-            // Rumble
-            ctx.fillStyle = color.rumble;
-            ctx.beginPath();
-            ctx.moveTo(p1.x - p1.w * 1.1, p1.y); ctx.lineTo(p1.x + p1.w * 1.1, p1.y);
-            ctx.lineTo(p2.x + p2.w * 1.1, p2.y); ctx.lineTo(p2.x - p2.w * 1.1, p2.y);
-            ctx.fill();
-
-            // Road
-            ctx.fillStyle = color.road;
-            ctx.beginPath();
-            ctx.moveTo(p1.x - p1.w, p1.y); ctx.lineTo(p1.x + p1.w, p1.y);
-            ctx.lineTo(p2.x + p2.w, p2.y); ctx.lineTo(p2.x - p2.w, p2.y);
-            ctx.fill();
-
-            // Lanes
-            if (color.lane !== color.road) {
-                ctx.fillStyle = color.lane;
-                let lw1 = p1.w / 40, lw2 = p2.w / 40;
-                ctx.fillRect(p1.x - lw1, p2.y, lw1*2, p1.y-p2.y);
-            }
-        }
-
-        function renderSprite(ctx, w, h, segment, sprite) {
-            let scale = engine.cameraDepth / (segment.p1.camera.z / engine.roadWidth);
-            let destX = segment.p1.screen.x + (scale * sprite.x * w / 2);
-            let destY = segment.p1.screen.y;
-            let size = 800 * scale;
-
-            ctx.fillStyle = '#2e7d32'; // Palm trunk/leaves
-            ctx.fillRect(destX - size/4, destY - size, size/2, size);
-        }
-
-        function renderCar(ctx, w, h, segment, x, color) {
-            let scale = engine.cameraDepth / (segment.p1.camera.z / engine.roadWidth);
-            let destX = segment.p1.screen.x + (scale * x * w / 2);
-            let destY = segment.p1.screen.y;
-            let size = 600 * scale;
-
-            ctx.fillStyle = color;
-            ctx.fillRect(destX - size/2, destY - size/2, size, size/3);
+        function drawCockpit(ctx, w, h) {
             ctx.fillStyle = '#111';
-            ctx.fillRect(destX - size/2, destY - size/4, size/5, size/4);
-            ctx.fillRect(destX + size/3, destY - size/4, size/5, size/4);
-        }
-
-        function drawCockpit(w, h) {
-            // Dashboard
-            ctx.fillStyle = '#1e272e';
             ctx.beginPath();
-            ctx.moveTo(0, h);
-            ctx.lineTo(0, h * 0.82);
-            ctx.quadraticCurveTo(w/2, h * 0.72, w, h * 0.82);
-            ctx.lineTo(w, h);
-            ctx.fill();
+            ctx.moveTo(0, h); ctx.lineTo(0, h*0.82);
+            ctx.quadraticCurveTo(w/2, h*0.75, w, h*0.82);
+            ctx.lineTo(w, h); ctx.fill();
 
-            // Accent Line
-            ctx.strokeStyle = state.color;
-            ctx.lineWidth = 4;
-            ctx.stroke();
+            ctx.strokeStyle = game.player.color;
+            ctx.lineWidth = 4; ctx.stroke();
 
-            // Steering Wheel
+            // Wheel
             ctx.save();
-            ctx.translate(w/2, h + 80);
-            let sAngle = 0;
-            if (keys.left) sAngle = -0.4;
-            if (keys.right) sAngle = 0.4;
-            ctx.rotate(sAngle);
-            
-            ctx.lineWidth = 45;
-            ctx.strokeStyle = '#0a0a0a';
-            ctx.beginPath();
-            ctx.arc(0, -220, 240, Math.PI + 0.4, -0.4);
-            ctx.stroke();
-            
-            ctx.strokeStyle = '#333';
-            ctx.lineWidth = 5;
-            ctx.stroke();
+            ctx.translate(w/2, h+50);
+            let steer = 0;
+            if(keys.left) steer = -0.4; if(keys.right) steer = 0.4;
+            ctx.rotate(steer);
+            ctx.lineWidth = 45; ctx.strokeStyle = '#050505';
+            ctx.beginPath(); ctx.arc(0, -200, 220, Math.PI+0.4, -0.4); ctx.stroke();
             ctx.restore();
         }
 
-        /* -----------------------------------------------------------
-           CONTROLS BINDING
-        ----------------------------------------------------------- */
+        // --- CONTROLS ---
         window.onkeydown = e => {
-            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
-            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = true;
-            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
-            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+            if(e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = true;
+            if(e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+            if(e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
         };
         window.onkeyup = e => {
-            if (e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
-            if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = false;
-            if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
-            if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+            if(e.code === 'ArrowUp' || e.code === 'KeyW') keys.up = false;
+            if(e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+            if(e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
         };
-
-        function setupMobile(id, key) {
+        const bindT = (id, k) => {
             const el = document.getElementById(id);
-            el.addEventListener('touchstart', e => { e.preventDefault(); keys[key] = true; });
-            el.addEventListener('touchend', e => { e.preventDefault(); keys[key] = false; });
-        }
-        setupMobile('ctrl-left', 'left');
-        setupMobile('ctrl-right', 'right');
-        setupMobile('btn-gas', 'up');
-
+            el.ontouchstart = (e) => { e.preventDefault(); keys[k] = true; };
+            el.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
+        };
+        bindT('touch-left', 'left'); bindT('touch-right', 'right'); bindT('btn-gas', 'up');
     </script>
 </body>
 </html>
