@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAWYNT APEX — V5.1 ULTRA</title>
+    <title>GAWYNT APEX — V6.0 ULTRA</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
@@ -11,6 +11,7 @@
             --primary: #0051ff;
             --neon: #00f2ff;
             --accent: #ff007f;
+            --boost: #ff3300;
             --glass: rgba(255, 255, 255, 0.95);
         }
 
@@ -29,103 +30,109 @@
         /* --- LOBBY SYSTEM --- */
         #lobby {
             position: fixed; inset: 0; z-index: 1000;
-            background: linear-gradient(135deg, #ffffff 0%, #a8ccff 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
             display: flex; align-items: center; justify-content: center;
             padding: 20px; transition: opacity 0.5s ease;
         }
 
         .container {
             width: 100%; max-width: 750px;
-            background: var(--glass);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(30px);
             padding: 40px; border-radius: 40px;
-            border: 2px solid white;
-            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.5);
             text-align: center;
         }
 
         .logo-main {
             font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5.5rem);
-            font-weight: 900; color: var(--primary); letter-spacing: -5px;
+            font-weight: 900; color: var(--neon); letter-spacing: -3px;
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
         }
 
         .section-label {
-            font-family: 'Orbitron'; font-size: 0.75rem; font-weight: 700;
-            color: #666; text-transform: uppercase; margin: 30px 0 15px;
+            font-family: 'Orbitron'; font-size: 0.85rem; font-weight: 700;
+            color: #aaa; text-transform: uppercase; margin: 30px 0 15px;
             display: flex; align-items: center; gap: 15px;
         }
-        .section-label::after { content: ""; flex: 1; height: 1px; background: #ddd; }
+        .section-label::after { content: ""; flex: 1; height: 1px; background: rgba(255,255,255,0.2); }
 
         /* SELECTION GRID */
         .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .card {
-            background: white; border: 2px solid #eee; border-radius: 20px;
+            background: rgba(255,255,255,0.1); border: 2px solid transparent; border-radius: 20px;
             padding: 25px 10px; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: white;
         }
         .card.selected {
-            border-color: var(--primary); background: #f0f5ff;
-            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 81, 255, 0.2);
+            border-color: var(--neon); background: rgba(0, 242, 255, 0.1);
+            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 242, 255, 0.2);
         }
 
         .dot-row { display: flex; justify-content: center; gap: 15px; }
         .dot {
             width: 55px; height: 55px; border-radius: 50%;
-            border: 5px solid white; cursor: pointer; box-shadow: 0 0 0 2px #eee;
+            border: 4px solid rgba(255,255,255,0.2); cursor: pointer;
             transition: 0.2s;
         }
-        .dot.active { box-shadow: 0 0 0 3px var(--primary); transform: scale(1.15); }
+        .dot.active { border-color: white; box-shadow: 0 0 20px currentColor; transform: scale(1.15); }
 
         /* NETWORK AREA */
-        .network-zone { background: #fff; padding: 35px; border-radius: 35px; margin-top: 35px; border: 1px solid #eee; }
+        .network-zone { background: rgba(0,0,0,0.3); padding: 35px; border-radius: 35px; margin-top: 35px; border: 1px solid rgba(255,255,255,0.1); }
         input {
-            width: 100%; padding: 22px; border-radius: 18px; border: 2px solid #eee;
+            width: 100%; padding: 22px; border-radius: 18px; border: 2px solid transparent;
             font-family: 'Orbitron'; text-align: center; font-size: 1.4rem; margin-bottom: 15px;
-            background: #fcfcfc;
+            background: rgba(255,255,255,0.1); color: white;
         }
+        input:focus { outline: none; border-color: var(--neon); }
 
         .btn {
             width: 100%; padding: 22px; border-radius: 18px; border: none;
             font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
-            text-transform: uppercase; transition: 0.2s;
+            text-transform: uppercase; transition: 0.2s; letter-spacing: 2px;
         }
-        .btn-host { background: var(--primary); color: white; margin-bottom: 12px; }
-        .btn-join { background: #2c3e50; color: white; }
+        .btn-host { background: var(--primary); color: white; margin-bottom: 12px; box-shadow: 0 10px 20px rgba(0,81,255,0.3); }
+        .btn-join { background: white; color: black; }
 
         /* --- GAME INTERFACE --- */
         #game-ui { display: none; }
-        #canvas { position: fixed; inset: 0; background: #a5d6f1; }
+        #canvas { position: fixed; inset: 0; background: #000; }
 
         #hud {
             position: fixed; top: 40px; width: 100%;
-            display: flex; justify-content: space-between; padding: 0 60px; z-index: 500;
+            display: flex; justify-content: space-between; padding: 0 40px; z-index: 500;
         }
         .stat-card {
-            background: rgba(255, 255, 255, 0.98);
-            padding: 15px 35px; border-radius: 25px;
-            border-bottom: 6px solid var(--primary);
-            text-align: center; min-width: 160px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(10px);
+            padding: 15px 30px; border-radius: 20px;
+            border-bottom: 4px solid var(--neon); border-top: 1px solid rgba(255,255,255,0.2);
+            text-align: center; min-width: 140px; color: white;
         }
-        .stat-val { font-family: 'Orbitron'; font-size: 2.4rem; font-weight: 900; color: #111; }
+        .stat-val { font-family: 'Orbitron'; font-size: 2.2rem; font-weight: 900; color: #fff; }
+        .boost-val { color: var(--boost); text-shadow: 0 0 10px var(--boost); }
 
         /* MOBILE JOYSTICKS */
         #mobile-controls {
-            position: fixed; bottom: 60px; width: 100%;
-            display: none; justify-content: space-between; padding: 0 60px; z-index: 500;
+            position: fixed; bottom: 40px; width: 100%;
+            display: none; justify-content: space-between; padding: 0 30px; z-index: 500;
         }
         .joy-circ {
-            width: 110px; height: 110px; background: rgba(255,255,255,0.95);
-            border-radius: 50%; border: 4px solid #ddd;
+            width: 90px; height: 90px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);
+            border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron'; font-weight: 900; color: #333;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            font-family: 'Orbitron'; font-weight: 900; color: white;
+            user-select: none;
         }
-        #btn-gas { width: 150px; height: 150px; border-color: var(--primary); color: var(--primary); font-size: 1.4rem; }
+        .joy-circ:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
+        .action-btns { display: flex; gap: 15px; }
+        #btn-gas { width: 110px; height: 110px; border-color: var(--neon); color: var(--neon); font-size: 1.2rem; }
+        #btn-boost { width: 90px; height: 90px; border-color: var(--boost); color: var(--boost); font-size: 0.9rem; align-self: flex-end;}
 
         #msg-box {
             position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-            z-index: 1200; font-family: 'Orbitron'; font-size: 12rem; color: var(--primary);
-            text-shadow: 0 20px 60px rgba(0,0,0,0.3); pointer-events: none;
+            z-index: 1200; font-family: 'Orbitron'; font-size: 12rem; color: var(--neon);
+            text-shadow: 0 0 40px var(--neon); pointer-events: none;
         }
     </style>
 </head>
@@ -134,7 +141,7 @@
     <div id="lobby">
         <div class="container">
             <h1 class="logo-main">GAWYNT</h1>
-            <p style="font-family:Orbitron; letter-spacing: 12px; color: #999; font-size: 0.8rem; margin-top: -15px;">PRO SERIES V5.1</p>
+            <p style="font-family:Orbitron; letter-spacing: 12px; color: var(--neon); font-size: 0.8rem; margin-top: -15px;">PRO SERIES V6.0</p>
 
             <div class="section-label">SELECT YOUR RIG</div>
             <div class="selection-grid" id="car-selector"></div>
@@ -145,24 +152,30 @@
             <div class="section-label">GLOBAL UPLINK</div>
             <div class="network-zone">
                 <button class="btn btn-host" id="host-btn">INITIATE SECTOR</button>
-                <input type="text" id="sector-code" placeholder="CODE">
+                <input type="text" id="sector-code" placeholder="ENTER SYNC CODE">
                 <button class="btn btn-join" id="join-btn">JOIN SECTOR</button>
-                <p id="status" style="margin-top:25px; font-family:Orbitron; font-weight:900; color:var(--primary);"></p>
+                <p id="status" style="margin-top:25px; font-family:Orbitron; font-weight:900; color:var(--neon);"></p>
             </div>
         </div>
     </div>
 
     <div id="game-ui">
         <div id="hud">
-            <div class="stat-card"><small style="font-weight:700; color:#888;">KM/H</small><div id="ui-speed" class="stat-val">0</div></div>
-            <div class="stat-card"><small style="font-weight:700; color:#888;">LAP</small><div id="ui-lap" class="stat-val">1/3</div></div>
+            <div class="stat-card"><small style="font-weight:700; color:#aaa;">SPEED</small><div id="ui-speed" class="stat-val">0</div></div>
+            <div class="stat-card" style="border-bottom-color: var(--boost);"><small style="font-weight:700; color:#aaa;">NOS</small><div id="ui-boost" class="stat-val boost-val">100</div></div>
+            <div class="stat-card"><small style="font-weight:700; color:#aaa;">LAP</small><div id="ui-lap" class="stat-val">1/3</div></div>
         </div>
         <canvas id="canvas"></canvas>
         <div id="msg-box">3</div>
         <div id="mobile-controls">
-            <div id="joy-L" class="joy-circ">L</div>
-            <div id="btn-gas" class="joy-circ">DRIVE</div>
-            <div id="joy-R" class="joy-circ">R</div>
+            <div style="display:flex; gap:15px;">
+                <div id="joy-L" class="joy-circ"><<</div>
+                <div id="joy-R" class="joy-circ">>></div>
+            </div>
+            <div class="action-btns">
+                <div id="btn-boost" class="joy-circ">NOS</div>
+                <div id="btn-gas" class="joy-circ">DRIVE</div>
+            </div>
         </div>
     </div>
 
@@ -190,28 +203,21 @@
         const COLORS = ['#0051ff', '#ff007f', '#00f2ff', '#4dff00', '#ffcc00'];
 
         let state = {
-            active: false,
-            role: null,
-            room: null,
-            car: CAR_RIGS[0],
-            color: COLORS[0],
-            p: { x: 0, z: 0, speed: 0, lap: 1 },
+            active: false, role: null, room: null,
+            car: CAR_RIGS[0], color: COLORS[0],
+            p: { x: 0, z: 0, speed: 0, lap: 1, boost: 100 },
             rival: { x: 0, z: 0, speed: 0, active: false, color: '#fff', lastZ: 0 }
         };
 
         const engine = {
             canvas: document.getElementById('canvas'),
             ctx: document.getElementById('canvas').getContext('2d'),
-            w: 0, h: 0,
-            roadW: 2400, // Wider track
-            segL: 200,
-            camH: 1000, camD: null,
-            drawDist: 400, // Further view
-            track: [],
-            trackLen: 0
+            w: 0, h: 0, roadW: 2400, segL: 200,
+            camH: 1000, camD: null, drawDist: 300, 
+            track: [], trackLen: 0
         };
 
-        const keys = { up: false, left: false, right: false };
+        const keys = { up: false, left: false, right: false, boost: false };
 
         /* -----------------------------------------------------------
            UI SYSTEM
@@ -234,6 +240,7 @@
                 const d = document.createElement('div');
                 d.className = `dot ${i===0?'active':''}`;
                 d.style.background = c;
+                d.style.color = c; // For box shadow currentColor
                 d.onclick = () => {
                     document.querySelectorAll('.dot').forEach(e=>e.classList.remove('active'));
                     d.classList.add('active'); state.color = c;
@@ -251,8 +258,7 @@
             state.role = 'host';
             document.getElementById('status').innerText = "GENERATED SECTOR: " + state.room;
             await set(ref(db, `apex_v5/${state.room}`), {
-                state: 'wait',
-                host: { x: 0, z: 0, speed: 0, color: state.color }
+                state: 'wait', host: { x: 0, z: 0, speed: 0, color: state.color }
             });
             listen();
         };
@@ -260,12 +266,10 @@
         document.getElementById('join-btn').onclick = async () => {
             const code = document.getElementById('sector-code').value.toUpperCase();
             if(!code) return;
-            state.room = code;
-            state.role = 'guest';
+            state.room = code; state.role = 'guest';
             document.getElementById('status').innerText = "SYNCING TO " + code;
             await update(ref(db, `apex_v5/${state.room}`), {
-                state: 'start',
-                guest: { x: 0, z: 0, speed: 0, color: state.color }
+                state: 'start', guest: { x: 0, z: 0, speed: 0, color: state.color }
             });
             listen();
         };
@@ -288,7 +292,7 @@
         }
 
         /* -----------------------------------------------------------
-           TRACK GENERATOR (V5 CURVATURE)
+           TRACK GENERATOR
         ----------------------------------------------------------- */
         function createTrack() {
             engine.track = [];
@@ -301,18 +305,18 @@
                         p2: { world: { z: (i+1) * engine.segL }, screen: {} },
                         curve: curve,
                         color: Math.floor(i/3)%2 ? 
-                            { road: '#3b3b3b', grass: '#1b5e20', rum: '#fff' } : 
-                            { road: '#2f2f2f', grass: '#154a19', rum: '#d32f2f' }
+                            { road: '#3b3b3b', grass: '#050a15', rum: '#fff' } : 
+                            { road: '#2f2f2f', grass: '#03060d', rum: '#d32f2f' }
                     });
                 }
             };
-            add(150, 0); // Start
-            add(100, 2); // Easy R
-            add(150, -4); // Hard L
-            add(200, 0); // Straight
-            add(120, 6); // Sharp R
-            add(100, -2); // Easy L
-            add(150, 0); // Finish
+            add(150, 0);   // Start
+            add(100, 2);   // Easy R
+            add(150, -4);  // Hard L
+            add(200, 0);   // Straight
+            add(120, 6);   // Sharp R
+            add(100, -2);  // Easy L
+            add(150, 0);   // Finish
             engine.trackLen = engine.track.length * engine.segL;
         }
 
@@ -320,11 +324,7 @@
            CORE GAMEPLAY
         ----------------------------------------------------------- */
         function project(p, camX, camY, camZ, w, h) {
-            p.camera = {
-                x: (p.world.x || 0) - camX,
-                y: (p.world.y || 0) - camY,
-                z: (p.world.z || 0) - camZ
-            };
+            p.camera = { x: (p.world.x || 0) - camX, y: (p.world.y || 0) - camY, z: (p.world.z || 0) - camZ };
             let scale = engine.camD / p.camera.z;
             p.screen.x = Math.round((w/2) + (scale * p.camera.x * w/2));
             p.screen.y = Math.round((h/2) - (scale * p.camera.y * h/2));
@@ -361,9 +361,17 @@
             engine.h = window.innerHeight;
             engine.canvas.width = engine.w;
             engine.canvas.height = engine.h;
-            engine.camD = 1 / Math.tan((100/2) * Math.PI / 180);
+            
+            // Fix 1: Dynamically adjust draw distance based on screen size
+            engine.drawDist = engine.w < 800 ? 120 : 300; 
             if(engine.w < 800) document.getElementById('mobile-controls').style.display = 'flex';
         }
+
+        // Cache UI elements outside the loop
+        let lastSpeed = -1, lastLap = -1, lastBoost = -1;
+        const uiSpeed = document.getElementById('ui-speed');
+        const uiLap = document.getElementById('ui-lap');
+        const uiBoost = document.getElementById('ui-boost');
 
         function mainLoop() {
             if(!state.active) return;
@@ -377,14 +385,22 @@
             const p = state.p;
             const car = state.car;
 
-            if(keys.up) p.speed = Math.min(p.speed + (car.acc * 6000 * dt), car.top * 80);
-            else p.speed *= car.friction;
+            // Upgrade 1: Boost Mechanics
+            let currentMaxSpeed = car.top * 80;
+            if (keys.boost && p.boost > 0 && keys.up) {
+                currentMaxSpeed *= 1.35; // 35% speed boost
+                p.speed = Math.min(p.speed + (car.acc * 12000 * dt), currentMaxSpeed);
+                p.boost = Math.max(0, p.boost - 30 * dt); // Drain boost
+            } else {
+                if (keys.up) p.speed = Math.min(p.speed + (car.acc * 6000 * dt), currentMaxSpeed);
+                else p.speed *= car.friction;
+                p.boost = Math.min(100, p.boost + 5 * dt); // Recharge boost
+            }
 
-            const speedPct = p.speed / (car.top * 80);
+            const speedPct = p.speed / currentMaxSpeed;
             if(keys.left) p.x -= dt * speedPct * car.turn;
             if(keys.right) p.x += dt * speedPct * car.turn;
 
-            // Track centrifugal force
             let seg = engine.track[Math.floor(p.z / engine.segL) % engine.track.length];
             p.x -= dt * speedPct * seg.curve * 2.5;
 
@@ -392,25 +408,42 @@
             if(p.z >= engine.trackLen) { p.z -= engine.trackLen; p.lap++; }
 
             p.x = Math.max(-2.8, Math.min(2.8, p.x));
-            document.getElementById('ui-speed').innerText = Math.floor(p.speed / 60);
-            document.getElementById('ui-lap').innerText = `${p.lap}/3`;
+            
+            // Fix 1 (Cont): Only write to the DOM if values change
+            let displaySpeed = Math.floor(p.speed / 60);
+            let displayBoost = Math.floor(p.boost);
+            
+            if(displaySpeed !== lastSpeed) { uiSpeed.innerText = displaySpeed; lastSpeed = displaySpeed; }
+            if(displayBoost !== lastBoost) { uiBoost.innerText = displayBoost; lastBoost = displayBoost; }
+            if(p.lap !== lastLap) { uiLap.innerText = `${p.lap}/3`; lastLap = p.lap; }
+            
+            // Upgrade 2: Dynamic Camera System based on speed
+            let speedFactor = p.speed / (car.top * 80);
+            engine.camH = 1000 - (speedFactor * 300); // Lower camera at high speeds
+            let fov = 100 + (speedFactor * 30); // Widen FOV at high speeds (tunnel vision)
+            engine.camD = 1 / Math.tan((fov/2) * Math.PI / 180);
         }
 
         function draw() {
             const ctx = engine.ctx;
             const w = engine.w, h = engine.h;
-            ctx.clearRect(0,0,w,h);
 
-            // Horizon Gradient
-            let grad = ctx.createLinearGradient(0,0,0,h);
-            grad.addColorStop(0, '#1a2a6c'); grad.addColorStop(0.5, '#b21f1f'); grad.addColorStop(1, '#fdbb2d');
+            let grad = ctx.createLinearGradient(0,0,0,h/2);
+            // Cyberpunk Sky
+            grad.addColorStop(0, '#0a0a2a'); grad.addColorStop(1, '#ff007f'); 
             ctx.fillStyle = grad; ctx.fillRect(0,0,w,h/2);
-            ctx.fillStyle = '#0a1a0a'; ctx.fillRect(0,h/2,w,h/2);
+            ctx.fillStyle = '#020205'; ctx.fillRect(0,h/2,w,h/2);
 
             let startI = Math.floor(state.p.z / engine.segL);
             let xOff = 0, dx = 0;
 
-            // Render Road
+            // Fix 2: Pre-calculate rival segment for correct rendering on curves
+            let rivalSegIndex = Math.floor(state.rival.z / engine.segL) % engine.track.length;
+            let rZ = state.rival.z - state.p.z;
+            if(rZ < -engine.trackLen/2) rZ += engine.trackLen;
+            if(rZ > engine.trackLen/2) rZ -= engine.trackLen;
+            let isRivalVisible = state.rival.active && rZ > 0 && rZ < engine.drawDist * engine.segL;
+
             for(let n=0; n<engine.drawDist; n++) {
                 let s = engine.track[(startI + n) % engine.track.length];
                 let looped = s.index < startI;
@@ -432,27 +465,24 @@
                 ctx.fillStyle = s.color.road;
                 ctx.beginPath(); ctx.moveTo(p1.x - p1.w, p1.y); ctx.lineTo(p1.x + p1.w, p1.y);
                 ctx.lineTo(p2.x + p2.w, p2.y); ctx.lineTo(p2.x - p2.w, p2.y); ctx.fill();
-            }
 
-            // --- RIVAL RENDERING (V5 FIXED SCALE) ---
-            if(state.rival.active) {
-                let rZ = state.rival.z - state.p.z;
-                if(rZ < -engine.trackLen/2) rZ += engine.trackLen;
-                if(rZ > engine.trackLen/2) rZ -= engine.trackLen;
-
-                if(rZ > 0 && rZ < engine.drawDist * engine.segL) {
-                    let scale = engine.camD / (rZ / engine.roadW);
-                    let rx = (w/2) + (scale * (state.rival.x - state.p.x) * engine.roadW * w/2000);
-                    let ry = (h/2) + (engine.camH * scale);
+                // Fix 2 (Cont): Draw rival perfectly attached to the track segment
+                if (isRivalVisible && s.index === rivalSegIndex) {
+                    let rx = p1.x + (state.rival.x * p1.w); 
+                    let ry = p1.y;
                     
-                    // Buffed Rival Size
-                    let carW = 180 * scale, carH = 100 * scale;
+                    let carW = p1.w * 0.45; 
+                    let carH = carW * 0.6;
+                    
+                    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                    ctx.fillRect(rx - carW/2, ry, carW, carH * 0.2);
+                    
                     ctx.fillStyle = state.rival.color;
                     ctx.fillRect(rx - carW/2, ry - carH, carW, carH);
                     
-                    // Shadow & Details
-                    ctx.fillStyle = 'rgba(0,0,0,0.3)';
-                    ctx.fillRect(rx - carW/2, ry, carW, 10*scale);
+                    ctx.fillStyle = '#ff0055'; // Taillights
+                    ctx.fillRect(rx - carW/2 + carW*0.1, ry - carH*0.4, carW*0.2, carH*0.2);
+                    ctx.fillRect(rx + carW/2 - carW*0.3, ry - carH*0.4, carW*0.2, carH*0.2);
                 }
             }
 
@@ -460,50 +490,55 @@
         }
 
         function drawCockpit(ctx, w, h) {
-            // Lower Dashboard for better visibility
             ctx.fillStyle = '#050505';
             ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h*0.9);
             ctx.quadraticCurveTo(w/2, h*0.82, w, h*0.9); ctx.lineTo(w, h); ctx.fill();
             
-            // Neon accent
-            ctx.strokeStyle = state.color; ctx.lineWidth = 3; ctx.stroke();
+            // Dynamic Neon accent based on boost
+            ctx.strokeStyle = keys.boost && state.p.boost > 0 ? var(--boost) : state.color; 
+            ctx.lineWidth = keys.boost ? 6 : 3; 
+            ctx.stroke();
 
-            // Responsive Steering Wheel
             ctx.save();
-            // Wheel is tucked lower on computer screens
             let wheelY = (w > 800) ? h + 150 : h + 50; 
             ctx.translate(w/2, wheelY);
             let s = 0; if(keys.left) s = -0.5; if(keys.right) s = 0.5;
-            ctx.rotate(s);
             
+            // Vibrate steering wheel when boosting
+            if(keys.boost && state.p.boost > 0) {
+                ctx.translate(Math.random()*4-2, Math.random()*4-2);
+            }
+            
+            ctx.rotate(s);
             ctx.lineWidth = 40; ctx.strokeStyle = '#0a0a0a';
             ctx.beginPath(); ctx.arc(0, -250, 250, Math.PI+0.4, -0.4); ctx.stroke();
             
-            // Hub
             ctx.fillStyle = '#111';
             ctx.beginPath(); ctx.arc(0,-250, 40, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         }
 
         /* -----------------------------------------------------------
-           CONTROLS
+           CONTROLS (WITH NOS SUPPORT)
         ----------------------------------------------------------- */
         window.onkeydown = e => {
             if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = true;
             if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = true;
             if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = true;
+            if(e.code==='ShiftLeft'||e.code==='ShiftRight') keys.boost = true;
         };
         window.onkeyup = e => {
             if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = false;
             if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = false;
             if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = false;
+            if(e.code==='ShiftLeft'||e.code==='ShiftRight') keys.boost = false;
         };
         const bind = (id, k) => {
             const el = document.getElementById(id);
             el.ontouchstart = (e) => { e.preventDefault(); keys[k] = true; };
             el.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
         };
-        bind('joy-L','left'); bind('joy-R','right'); bind('btn-gas','up');
+        bind('joy-L','left'); bind('joy-R','right'); bind('btn-gas','up'); bind('btn-boost','boost');
     </script>
 </body>
 </html>
