@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GAWYNT APEX — ULTRA MULTIPLAYER</title>
+    <title>GAWYNT APEX — V5.1 ULTRA</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
@@ -11,7 +11,7 @@
             --primary: #0051ff;
             --neon: #00f2ff;
             --accent: #ff007f;
-            --glass: rgba(255, 255, 255, 0.92);
+            --glass: rgba(255, 255, 255, 0.95);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -31,98 +31,101 @@
             position: fixed; inset: 0; z-index: 1000;
             background: linear-gradient(135deg, #ffffff 0%, #a8ccff 100%);
             display: flex; align-items: center; justify-content: center;
-            overflow-y: auto; padding: 20px;
+            padding: 20px; transition: opacity 0.5s ease;
         }
 
         .container {
-            width: 100%; max-width: 700px;
+            width: 100%; max-width: 750px;
             background: var(--glass);
-            backdrop-filter: blur(25px);
+            backdrop-filter: blur(30px);
             padding: 40px; border-radius: 40px;
             border: 2px solid white;
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 50px 120px rgba(0, 0, 0, 0.25);
             text-align: center;
         }
 
         .logo-main {
-            font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5rem);
-            font-weight: 900; color: var(--primary); letter-spacing: -4px;
-            margin-bottom: 5px;
+            font-family: 'Orbitron'; font-size: clamp(2.5rem, 8vw, 5.5rem);
+            font-weight: 900; color: var(--primary); letter-spacing: -5px;
         }
 
         .section-label {
-            font-family: 'Orbitron'; font-size: 0.7rem; font-weight: 700;
-            color: #777; text-transform: uppercase; margin: 30px 0 15px;
+            font-family: 'Orbitron'; font-size: 0.75rem; font-weight: 700;
+            color: #666; text-transform: uppercase; margin: 30px 0 15px;
             display: flex; align-items: center; gap: 15px;
         }
         .section-label::after { content: ""; flex: 1; height: 1px; background: #ddd; }
 
-        /* SELECTION */
+        /* SELECTION GRID */
         .selection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .card {
             background: white; border: 2px solid #eee; border-radius: 20px;
-            padding: 20px 10px; cursor: pointer; transition: 0.3s;
+            padding: 25px 10px; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .card.selected {
             border-color: var(--primary); background: #f0f5ff;
-            transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 81, 255, 0.2);
+            transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0, 81, 255, 0.2);
         }
 
-        .color-row { display: flex; justify-content: center; gap: 15px; }
+        .dot-row { display: flex; justify-content: center; gap: 15px; }
         .dot {
-            width: 50px; height: 50px; border-radius: 50%;
-            border: 4px solid white; cursor: pointer; box-shadow: 0 0 0 2px #eee;
+            width: 55px; height: 55px; border-radius: 50%;
+            border: 5px solid white; cursor: pointer; box-shadow: 0 0 0 2px #eee;
+            transition: 0.2s;
         }
-        .dot.active { box-shadow: 0 0 0 3px var(--primary); transform: scale(1.1); }
+        .dot.active { box-shadow: 0 0 0 3px var(--primary); transform: scale(1.15); }
 
-        /* NETWORK */
-        .network-card { background: #fff; padding: 30px; border-radius: 30px; margin-top: 30px; border: 1px solid #eee; }
+        /* NETWORK AREA */
+        .network-zone { background: #fff; padding: 35px; border-radius: 35px; margin-top: 35px; border: 1px solid #eee; }
         input {
-            width: 100%; padding: 20px; border-radius: 15px; border: 2px solid #eee;
-            font-family: 'Orbitron'; text-align: center; font-size: 1.2rem; margin-bottom: 15px;
+            width: 100%; padding: 22px; border-radius: 18px; border: 2px solid #eee;
+            font-family: 'Orbitron'; text-align: center; font-size: 1.4rem; margin-bottom: 15px;
+            background: #fcfcfc;
         }
 
         .btn {
-            width: 100%; padding: 20px; border-radius: 15px; border: none;
+            width: 100%; padding: 22px; border-radius: 18px; border: none;
             font-family: 'Orbitron'; font-weight: 900; cursor: pointer;
             text-transform: uppercase; transition: 0.2s;
         }
-        .btn-host { background: var(--primary); color: white; margin-bottom: 10px; }
+        .btn-host { background: var(--primary); color: white; margin-bottom: 12px; }
         .btn-join { background: #2c3e50; color: white; }
 
-        /* --- GAME UI --- */
+        /* --- GAME INTERFACE --- */
         #game-ui { display: none; }
-        #canvas { position: fixed; inset: 0; background: #8ec5fc; }
+        #canvas { position: fixed; inset: 0; background: #a5d6f1; }
 
         #hud {
-            position: fixed; top: 30px; width: 100%;
-            display: flex; justify-content: space-between; padding: 0 40px; z-index: 500;
+            position: fixed; top: 40px; width: 100%;
+            display: flex; justify-content: space-between; padding: 0 60px; z-index: 500;
         }
-        .stat-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 15px 30px; border-radius: 20px;
-            border-bottom: 5px solid var(--primary);
-            text-align: center; min-width: 140px;
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 15px 35px; border-radius: 25px;
+            border-bottom: 6px solid var(--primary);
+            text-align: center; min-width: 160px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .stat-val { font-family: 'Orbitron'; font-size: 2rem; font-weight: 900; }
+        .stat-val { font-family: 'Orbitron'; font-size: 2.4rem; font-weight: 900; color: #111; }
 
-        /* CONTROLS */
+        /* MOBILE JOYSTICKS */
         #mobile-controls {
-            position: fixed; bottom: 50px; width: 100%;
-            display: none; justify-content: space-between; padding: 0 50px; z-index: 500;
+            position: fixed; bottom: 60px; width: 100%;
+            display: none; justify-content: space-between; padding: 0 60px; z-index: 500;
         }
-        .joy-btn {
-            width: 100px; height: 100px; background: rgba(255,255,255,0.9);
-            border-radius: 50%; border: 3px solid #ddd;
+        .joy-circ {
+            width: 110px; height: 110px; background: rgba(255,255,255,0.95);
+            border-radius: 50%; border: 4px solid #ddd;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Orbitron'; font-weight: 900;
+            font-family: 'Orbitron'; font-weight: 900; color: #333;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         }
-        #btn-gas { width: 130px; height: 130px; border-color: var(--primary); color: var(--primary); font-size: 1.2rem; }
+        #btn-gas { width: 150px; height: 150px; border-color: var(--primary); color: var(--primary); font-size: 1.4rem; }
 
         #msg-box {
             position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-            z-index: 1100; font-family: 'Orbitron'; font-size: 10rem; color: var(--primary);
-            text-shadow: 0 10px 50px rgba(0,0,0,0.2); pointer-events: none;
+            z-index: 1200; font-family: 'Orbitron'; font-size: 12rem; color: var(--primary);
+            text-shadow: 0 20px 60px rgba(0,0,0,0.3); pointer-events: none;
         }
     </style>
 </head>
@@ -131,35 +134,35 @@
     <div id="lobby">
         <div class="container">
             <h1 class="logo-main">GAWYNT</h1>
-            <p style="font-family:Orbitron; letter-spacing: 8px; color: #888; font-size: 0.8rem;">APEX PREDATOR V4</p>
+            <p style="font-family:Orbitron; letter-spacing: 12px; color: #999; font-size: 0.8rem; margin-top: -15px;">PRO SERIES V5.1</p>
 
-            <div class="section-label">1. Choose Your Machine</div>
+            <div class="section-label">SELECT YOUR RIG</div>
             <div class="selection-grid" id="car-selector"></div>
 
-            <div class="section-label">2. Identity</div>
-            <div class="color-row" id="color-selector"></div>
+            <div class="section-label">TEAM COLORS</div>
+            <div class="dot-row" id="color-selector"></div>
 
-            <div class="section-label">3. Network Access</div>
-            <div class="network-card">
-                <button class="btn btn-host" id="host-btn">Create New Sector</button>
-                <input type="text" id="sector-code" placeholder="SECTOR CODE">
-                <button class="btn btn-join" id="join-btn">Join Sector</button>
-                <div id="status" style="margin-top:20px; font-family:Orbitron; font-weight:900; color:var(--primary);">READY FOR UPLINK...</div>
+            <div class="section-label">GLOBAL UPLINK</div>
+            <div class="network-zone">
+                <button class="btn btn-host" id="host-btn">INITIATE SECTOR</button>
+                <input type="text" id="sector-code" placeholder="CODE">
+                <button class="btn btn-join" id="join-btn">JOIN SECTOR</button>
+                <p id="status" style="margin-top:25px; font-family:Orbitron; font-weight:900; color:var(--primary);"></p>
             </div>
         </div>
     </div>
 
     <div id="game-ui">
         <div id="hud">
-            <div class="stat-box"><small>KM/H</small><div id="ui-speed" class="stat-val">0</div></div>
-            <div class="stat-box"><small>LAP</small><div id="ui-lap" class="stat-val">1/3</div></div>
+            <div class="stat-card"><small style="font-weight:700; color:#888;">KM/H</small><div id="ui-speed" class="stat-val">0</div></div>
+            <div class="stat-card"><small style="font-weight:700; color:#888;">LAP</small><div id="ui-lap" class="stat-val">1/3</div></div>
         </div>
         <canvas id="canvas"></canvas>
         <div id="msg-box">3</div>
         <div id="mobile-controls">
-            <div id="key-L" class="joy-btn">L</div>
-            <div id="key-GAS" class="joy-btn">GAS</div>
-            <div id="key-R" class="joy-btn">R</div>
+            <div id="joy-L" class="joy-circ">L</div>
+            <div id="btn-gas" class="joy-circ">DRIVE</div>
+            <div id="joy-R" class="joy-circ">R</div>
         </div>
     </div>
 
@@ -177,80 +180,81 @@
         const db = getDatabase(fb);
 
         /* -----------------------------------------------------------
-           ENGINE CONFIGURATION & PHYSICS CONSTANTS
+           GLOBAL STATE & CONSTANTS
         ----------------------------------------------------------- */
-        const CARS = [
-            { name: 'X-BOLT', top: 380, acc: 0.25, turn: 5.5, friction: 0.98 },
-            { name: 'G-TECH', top: 310, acc: 0.18, turn: 6.2, friction: 0.99 },
-            { name: 'ZENITH', top: 260, acc: 0.35, turn: 7.0, friction: 0.97 }
+        const CAR_RIGS = [
+            { name: 'HYPER-X', top: 420, acc: 0.35, turn: 6.0, friction: 0.985 },
+            { name: 'STRATOS', top: 340, acc: 0.22, turn: 6.8, friction: 0.992 },
+            { name: 'GHOST', top: 280, acc: 0.45, turn: 8.0, friction: 0.975 }
         ];
-        const COLORS = ['#0051ff', '#ff007f', '#00f2ff', '#33ff00', '#ffaa00'];
+        const COLORS = ['#0051ff', '#ff007f', '#00f2ff', '#4dff00', '#ffcc00'];
 
         let state = {
             active: false,
             role: null,
             room: null,
-            car: CARS[0],
+            car: CAR_RIGS[0],
             color: COLORS[0],
-            player: { x: 0, z: 0, speed: 0, lap: 1 },
-            rival: { x: 0, z: 0, speed: 0, active: false, color: '#fff' },
-            particles: []
+            p: { x: 0, z: 0, speed: 0, lap: 1 },
+            rival: { x: 0, z: 0, speed: 0, active: false, color: '#fff', lastZ: 0 }
         };
 
-        const view = {
+        const engine = {
             canvas: document.getElementById('canvas'),
             ctx: document.getElementById('canvas').getContext('2d'),
-            w: 1024, h: 768,
-            roadW: 2000, segL: 200,
+            w: 0, h: 0,
+            roadW: 2400, // Wider track
+            segL: 200,
             camH: 1000, camD: null,
-            drawDist: 350,
-            track: []
+            drawDist: 400, // Further view
+            track: [],
+            trackLen: 0
         };
 
-        const inputs = { up: false, left: false, right: false };
+        const keys = { up: false, left: false, right: false };
 
         /* -----------------------------------------------------------
-           UI BUILDER
+           UI SYSTEM
         ----------------------------------------------------------- */
-        function initLobby() {
-            const carGrid = document.getElementById('car-selector');
-            CARS.forEach((c, i) => {
+        function setupUI() {
+            const carCont = document.getElementById('car-selector');
+            CAR_RIGS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `card ${i===0?'selected':''}`;
                 d.innerHTML = `<strong>${c.name}</strong><br><small>${c.top} KM/H</small>`;
                 d.onclick = () => {
-                    document.querySelectorAll('.card').forEach(el=>el.classList.remove('selected'));
+                    document.querySelectorAll('.card').forEach(e=>e.classList.remove('selected'));
                     d.classList.add('selected'); state.car = c;
                 };
-                carGrid.appendChild(d);
+                carCont.appendChild(d);
             });
 
-            const colRow = document.getElementById('color-selector');
+            const colCont = document.getElementById('color-selector');
             COLORS.forEach((c, i) => {
                 const d = document.createElement('div');
                 d.className = `dot ${i===0?'active':''}`;
                 d.style.background = c;
                 d.onclick = () => {
-                    document.querySelectorAll('.dot').forEach(el=>el.classList.remove('active'));
+                    document.querySelectorAll('.dot').forEach(e=>e.classList.remove('active'));
                     d.classList.add('active'); state.color = c;
                 };
-                colRow.appendChild(d);
+                colCont.appendChild(d);
             });
         }
-        initLobby();
+        setupUI();
 
         /* -----------------------------------------------------------
-           NETWORK LOGIC (JOIN/HOST FIXED)
+           NETWORKING (STABLE SYNC)
         ----------------------------------------------------------- */
         document.getElementById('host-btn').onclick = async () => {
             state.room = Math.random().toString(36).substring(7).toUpperCase();
             state.role = 'host';
-            document.getElementById('status').innerText = "SECTOR: " + state.room;
-            await set(ref(db, `apex_v4/${state.room}`), {
+            document.getElementById('status').innerText = "GENERATED SECTOR: " + state.room;
+            await set(ref(db, `apex_v5/${state.room}`), {
                 state: 'wait',
                 host: { x: 0, z: 0, speed: 0, color: state.color }
             });
-            syncLoop();
+            listen();
         };
 
         document.getElementById('join-btn').onclick = async () => {
@@ -258,75 +262,62 @@
             if(!code) return;
             state.room = code;
             state.role = 'guest';
-            document.getElementById('status').innerText = "LINKING TO " + code;
-            await update(ref(db, `apex_v4/${state.room}`), {
+            document.getElementById('status').innerText = "SYNCING TO " + code;
+            await update(ref(db, `apex_v5/${state.room}`), {
                 state: 'start',
                 guest: { x: 0, z: 0, speed: 0, color: state.color }
             });
-            syncLoop();
+            listen();
         };
 
-        function syncLoop() {
-            onValue(ref(db, `apex_v4/${state.room}`), (snap) => {
-                const data = snap.val();
-                if(!data) return;
-                if(data.state === 'start' && !state.active) startRace();
+        function listen() {
+            onValue(ref(db, `apex_v5/${state.room}`), (snap) => {
+                const val = snap.val();
+                if(!val) return;
+                if(val.state === 'start' && !state.active) runGame();
                 
-                const rivalData = (state.role === 'host') ? data.guest : data.host;
-                if(rivalData) {
-                    state.rival.x = rivalData.x;
-                    state.rival.z = rivalData.z;
-                    state.rival.speed = rivalData.speed;
-                    state.rival.color = rivalData.color;
+                const rival = (state.role === 'host') ? val.guest : val.host;
+                if(rival) {
+                    state.rival.x = rival.x;
+                    state.rival.z = rival.z;
+                    state.rival.speed = rival.speed;
+                    state.rival.color = rival.color;
                     state.rival.active = true;
                 }
             });
         }
 
         /* -----------------------------------------------------------
-           TRACK GENERATOR
+           TRACK GENERATOR (V5 CURVATURE)
         ----------------------------------------------------------- */
-        function buildTrack() {
-            view.track = [];
-            const addSeg = (curve) => {
-                const i = view.track.length;
-                view.track.push({
-                    index: i,
-                    p1: { world: { z: i * view.segL }, screen: {} },
-                    p2: { world: { z: (i+1) * view.segL }, screen: {} },
-                    curve: curve,
-                    sprites: (i % 20 === 0) ? [{x: 1.5, type: 'tree'}] : [],
-                    color: Math.floor(i/3)%2 ? 
-                        { road: '#333', grass: '#2e7d32', rum: '#fff' } : 
-                        { road: '#222', grass: '#276b2b', rum: '#ff0000' }
-                });
+        function createTrack() {
+            engine.track = [];
+            const add = (len, curve) => {
+                for(let n=0; n<len; n++) {
+                    const i = engine.track.length;
+                    engine.track.push({
+                        index: i,
+                        p1: { world: { z: i * engine.segL }, screen: {} },
+                        p2: { world: { z: (i+1) * engine.segL }, screen: {} },
+                        curve: curve,
+                        color: Math.floor(i/3)%2 ? 
+                            { road: '#3b3b3b', grass: '#1b5e20', rum: '#fff' } : 
+                            { road: '#2f2f2f', grass: '#154a19', rum: '#d32f2f' }
+                    });
+                }
             };
-
-            for(let i=0; i<100; i++) addSeg(0);
-            for(let i=0; i<100; i++) addSeg(2);
-            for(let i=0; i<150; i++) addSeg(-3);
-            for(let i=0; i<100; i++) addSeg(0);
-            for(let i=0; i<100; i++) addSeg(5);
-            for(let i=0; i<100; i++) addSeg(0);
-            view.trackLen = view.track.length * view.segL;
+            add(150, 0); // Start
+            add(100, 2); // Easy R
+            add(150, -4); // Hard L
+            add(200, 0); // Straight
+            add(120, 6); // Sharp R
+            add(100, -2); // Easy L
+            add(150, 0); // Finish
+            engine.trackLen = engine.track.length * engine.segL;
         }
 
         /* -----------------------------------------------------------
-           PARTICLE ENGINE
-        ----------------------------------------------------------- */
-        function spawnSmoke(x, z) {
-            if(state.player.speed < 2000) return;
-            state.particles.push({
-                x: x + (Math.random()-0.5),
-                z: z,
-                y: 10 + Math.random()*20,
-                life: 1.0,
-                size: 5 + Math.random()*15
-            });
-        }
-
-        /* -----------------------------------------------------------
-           3D RENDERING CORE
+           CORE GAMEPLAY
         ----------------------------------------------------------- */
         function project(p, camX, camY, camZ, w, h) {
             p.camera = {
@@ -334,18 +325,18 @@
                 y: (p.world.y || 0) - camY,
                 z: (p.world.z || 0) - camZ
             };
-            let scale = view.camD / p.camera.z;
+            let scale = engine.camD / p.camera.z;
             p.screen.x = Math.round((w/2) + (scale * p.camera.x * w/2));
             p.screen.y = Math.round((h/2) - (scale * p.camera.y * h/2));
-            p.screen.w = Math.round(scale * view.roadW * w/2);
+            p.screen.w = Math.round(scale * engine.roadW * w/2);
         }
 
-        async function startRace() {
+        async function runGame() {
             state.active = true;
             document.getElementById('lobby').style.display = 'none';
             document.getElementById('game-ui').style.display = 'block';
             
-            buildTrack();
+            createTrack();
             resize();
             window.addEventListener('resize', resize);
 
@@ -354,113 +345,114 @@
             for(let i=3; i>0; i--) { msg.innerText = i; await new Promise(r=>setTimeout(r,1000)); }
             msg.innerText = "GO!"; setTimeout(()=>msg.style.display='none', 800);
 
-            // High Frequency Sync
+            // Sync Interval
             setInterval(() => {
                 if(!state.active) return;
-                update(ref(db, `apex_v4/${state.room}/${state.role}`), {
-                    x: state.player.x, z: state.player.z, speed: state.player.speed
+                update(ref(db, `apex_v5/${state.room}/${state.role}`), {
+                    x: state.p.x, z: state.p.z, speed: state.p.speed
                 });
-            }, 40);
+            }, 35);
 
-            loop();
+            mainLoop();
         }
 
         function resize() {
-            view.canvas.width = window.innerWidth;
-            view.canvas.height = window.innerHeight;
-            view.camD = 1 / Math.tan((100/2) * Math.PI / 180);
-            if(window.innerWidth < 800) document.getElementById('mobile-controls').style.display = 'flex';
+            engine.w = window.innerWidth;
+            engine.h = window.innerHeight;
+            engine.canvas.width = engine.w;
+            engine.canvas.height = engine.h;
+            engine.camD = 1 / Math.tan((100/2) * Math.PI / 180);
+            if(engine.w < 800) document.getElementById('mobile-controls').style.display = 'flex';
         }
 
-        function loop() {
+        function mainLoop() {
             if(!state.active) return;
             updatePhysics();
-            render();
-            requestAnimationFrame(loop);
+            draw();
+            requestAnimationFrame(mainLoop);
         }
 
         function updatePhysics() {
-            const p = state.player;
-            const car = state.car;
             const dt = 1/60;
+            const p = state.p;
+            const car = state.car;
 
-            // Acceleration (Buffed)
-            if(inputs.up) p.speed = Math.min(p.speed + (car.acc * 5000 * dt), car.top * 60);
+            if(keys.up) p.speed = Math.min(p.speed + (car.acc * 6000 * dt), car.top * 80);
             else p.speed *= car.friction;
 
-            const speedPct = p.speed / (car.top * 60);
-            
-            // Steering
-            if(inputs.left) p.x -= dt * speedPct * car.turn;
-            if(inputs.right) p.x += dt * speedPct * car.turn;
+            const speedPct = p.speed / (car.top * 80);
+            if(keys.left) p.x -= dt * speedPct * car.turn;
+            if(keys.right) p.x += dt * speedPct * car.turn;
 
-            // Centrifugal Force
-            let seg = view.track[Math.floor(p.z / view.segL) % view.track.length];
-            p.x -= dt * speedPct * seg.curve * 2;
+            // Track centrifugal force
+            let seg = engine.track[Math.floor(p.z / engine.segL) % engine.track.length];
+            p.x -= dt * speedPct * seg.curve * 2.5;
 
             p.z += p.speed * dt;
-            if(p.z >= view.trackLen) { p.z -= view.trackLen; p.lap++; }
+            if(p.z >= engine.trackLen) { p.z -= engine.trackLen; p.lap++; }
 
-            p.x = Math.max(-2.5, Math.min(2.5, p.x));
-            document.getElementById('ui-speed').innerText = Math.floor(p.speed / 50);
+            p.x = Math.max(-2.8, Math.min(2.8, p.x));
+            document.getElementById('ui-speed').innerText = Math.floor(p.speed / 60);
             document.getElementById('ui-lap').innerText = `${p.lap}/3`;
-            
-            if(speedPct > 0.5 && Math.abs(p.x) > 1) spawnSmoke(p.x, p.z);
         }
 
-        function render() {
-            const ctx = view.ctx;
-            const w = view.canvas.width;
-            const h = view.canvas.height;
+        function draw() {
+            const ctx = engine.ctx;
+            const w = engine.w, h = engine.h;
             ctx.clearRect(0,0,w,h);
 
-            // Sky/Ground
-            ctx.fillStyle = '#8ec5fc'; ctx.fillRect(0,0,w,h/2);
-            ctx.fillStyle = '#1b5e20'; ctx.fillRect(0,h/2,w,h/2);
+            // Horizon Gradient
+            let grad = ctx.createLinearGradient(0,0,0,h);
+            grad.addColorStop(0, '#1a2a6c'); grad.addColorStop(0.5, '#b21f1f'); grad.addColorStop(1, '#fdbb2d');
+            ctx.fillStyle = grad; ctx.fillRect(0,0,w,h/2);
+            ctx.fillStyle = '#0a1a0a'; ctx.fillRect(0,h/2,w,h/2);
 
-            let startI = Math.floor(state.player.z / view.segL);
-            let xOffset = 0, dx = 0;
+            let startI = Math.floor(state.p.z / engine.segL);
+            let xOff = 0, dx = 0;
 
-            // Render Road Segments
-            for(let n=0; n<view.drawDist; n++) {
-                let s = view.track[(startI + n) % view.track.length];
+            // Render Road
+            for(let n=0; n<engine.drawDist; n++) {
+                let s = engine.track[(startI + n) % engine.track.length];
                 let looped = s.index < startI;
 
-                project(s.p1, (state.player.x * view.roadW) - xOffset, view.camH, state.player.z - (looped ? view.trackLen : 0), w, h);
-                project(s.p2, (state.player.x * view.roadW) - xOffset - dx, view.camH, state.player.z - (looped ? view.trackLen : 0), w, h);
+                project(s.p1, (state.p.x * engine.roadW) - xOff, engine.camH, state.p.z - (looped ? engine.trackLen : 0), w, h);
+                project(s.p2, (state.p.x * engine.roadW) - xOff - dx, engine.camH, state.p.z - (looped ? engine.trackLen : 0), w, h);
 
-                xOffset += dx;
-                dx += s.curve;
+                xOff += dx; dx += s.curve;
 
-                if(s.p1.camera.z <= view.camD) continue;
+                if(s.p1.camera.z <= engine.camD) continue;
 
-                // Draw Slices
                 const p1 = s.p1.screen, p2 = s.p2.screen;
                 ctx.fillStyle = s.color.grass; ctx.fillRect(0, p2.y, w, p1.y-p2.y);
+                
                 ctx.fillStyle = s.color.rum;
-                ctx.beginPath(); ctx.moveTo(p1.x - p1.w*1.1, p1.y); ctx.lineTo(p1.x + p1.w*1.1, p1.y);
-                ctx.lineTo(p2.x + p2.w*1.1, p2.y); ctx.lineTo(p2.x - p2.w*1.1, p2.y); ctx.fill();
+                ctx.beginPath(); ctx.moveTo(p1.x - p1.w*1.15, p1.y); ctx.lineTo(p1.x + p1.w*1.15, p1.y);
+                ctx.lineTo(p2.x + p2.w*1.15, p2.y); ctx.lineTo(p2.x - p2.w*1.15, p2.y); ctx.fill();
+
                 ctx.fillStyle = s.color.road;
                 ctx.beginPath(); ctx.moveTo(p1.x - p1.w, p1.y); ctx.lineTo(p1.x + p1.w, p1.y);
                 ctx.lineTo(p2.x + p2.w, p2.y); ctx.lineTo(p2.x - p2.w, p2.y); ctx.fill();
             }
 
-            // Render Rival (Fixed Handshake)
+            // --- RIVAL RENDERING (V5 FIXED SCALE) ---
             if(state.rival.active) {
-                let rZ = state.rival.z - state.player.z;
-                // Wrap-around logic for multiplayer
-                if(rZ < -view.trackLen/2) rZ += view.trackLen;
-                if(rZ > view.trackLen/2) rZ -= view.trackLen;
+                let rZ = state.rival.z - state.p.z;
+                if(rZ < -engine.trackLen/2) rZ += engine.trackLen;
+                if(rZ > engine.trackLen/2) rZ -= engine.trackLen;
 
-                if(rZ > 0 && rZ < view.drawDist * view.segL) {
-                    let scale = view.camD / (rZ / view.roadW);
-                    let rx = (w/2) + (scale * (state.rival.x - state.player.x) * view.roadW * w/2000);
-                    let ry = (h/2) + (view.camH * scale);
+                if(rZ > 0 && rZ < engine.drawDist * engine.segL) {
+                    let scale = engine.camD / (rZ / engine.roadW);
+                    let rx = (w/2) + (scale * (state.rival.x - state.p.x) * engine.roadW * w/2000);
+                    let ry = (h/2) + (engine.camH * scale);
+                    
+                    // Buffed Rival Size
+                    let carW = 180 * scale, carH = 100 * scale;
                     ctx.fillStyle = state.rival.color;
-                    ctx.fillRect(rx - 50*scale, ry - 80*scale, 100*scale, 50*scale);
-                    // Rival Label
-                    ctx.fillStyle = "white"; ctx.font = "bold 12px Orbitron";
-                    ctx.fillText("RIVAL", rx - 20, ry - 90*scale);
+                    ctx.fillRect(rx - carW/2, ry - carH, carW, carH);
+                    
+                    // Shadow & Details
+                    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                    ctx.fillRect(rx - carW/2, ry, carW, 10*scale);
                 }
             }
 
@@ -468,38 +460,50 @@
         }
 
         function drawCockpit(ctx, w, h) {
-            ctx.fillStyle = '#0a0a0a';
-            ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h*0.82);
-            ctx.quadraticCurveTo(w/2, h*0.74, w, h*0.82); ctx.lineTo(w, h); ctx.fill();
-            ctx.strokeStyle = state.color; ctx.lineWidth = 5; ctx.stroke();
+            // Lower Dashboard for better visibility
+            ctx.fillStyle = '#050505';
+            ctx.beginPath(); ctx.moveTo(0, h); ctx.lineTo(0, h*0.9);
+            ctx.quadraticCurveTo(w/2, h*0.82, w, h*0.9); ctx.lineTo(w, h); ctx.fill();
+            
+            // Neon accent
+            ctx.strokeStyle = state.color; ctx.lineWidth = 3; ctx.stroke();
 
-            ctx.save(); ctx.translate(w/2, h+60);
-            let steer = 0; if(inputs.left) steer = -0.4; if(inputs.right) steer = 0.4;
-            ctx.rotate(steer);
-            ctx.lineWidth = 50; ctx.strokeStyle = '#050505';
-            ctx.beginPath(); ctx.arc(0, -220, 240, Math.PI+0.4, -0.4); ctx.stroke();
+            // Responsive Steering Wheel
+            ctx.save();
+            // Wheel is tucked lower on computer screens
+            let wheelY = (w > 800) ? h + 150 : h + 50; 
+            ctx.translate(w/2, wheelY);
+            let s = 0; if(keys.left) s = -0.5; if(keys.right) s = 0.5;
+            ctx.rotate(s);
+            
+            ctx.lineWidth = 40; ctx.strokeStyle = '#0a0a0a';
+            ctx.beginPath(); ctx.arc(0, -250, 250, Math.PI+0.4, -0.4); ctx.stroke();
+            
+            // Hub
+            ctx.fillStyle = '#111';
+            ctx.beginPath(); ctx.arc(0,-250, 40, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         }
 
         /* -----------------------------------------------------------
-           CONTROLS BINDING
+           CONTROLS
         ----------------------------------------------------------- */
         window.onkeydown = e => {
-            if(e.code==='ArrowUp'||e.code==='KeyW') inputs.up = true;
-            if(e.code==='ArrowLeft'||e.code==='KeyA') inputs.left = true;
-            if(e.code==='ArrowRight'||e.code==='KeyD') inputs.right = true;
+            if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = true;
+            if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = true;
+            if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = true;
         };
         window.onkeyup = e => {
-            if(e.code==='ArrowUp'||e.code==='KeyW') inputs.up = false;
-            if(e.code==='ArrowLeft'||e.code==='KeyA') inputs.left = false;
-            if(e.code==='ArrowRight'||e.code==='KeyD') inputs.right = false;
+            if(e.code==='ArrowUp'||e.code==='KeyW') keys.up = false;
+            if(e.code==='ArrowLeft'||e.code==='KeyA') keys.left = false;
+            if(e.code==='ArrowRight'||e.code==='KeyD') keys.right = false;
         };
-        const touch = (id, k) => {
+        const bind = (id, k) => {
             const el = document.getElementById(id);
-            el.ontouchstart = (e) => { e.preventDefault(); inputs[k] = true; };
-            el.ontouchend = (e) => { e.preventDefault(); inputs[k] = false; };
+            el.ontouchstart = (e) => { e.preventDefault(); keys[k] = true; };
+            el.ontouchend = (e) => { e.preventDefault(); keys[k] = false; };
         };
-        touch('key-L','left'); touch('key-R','right'); touch('key-GAS','up');
+        bind('joy-L','left'); bind('joy-R','right'); bind('btn-gas','up');
     </script>
 </body>
 </html>
